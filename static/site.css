@@ -1,0 +1,67 @@
+.message {
+    font-weight: 600;
+    color: blue;
+}
+
+.header {
+    background: #f4f4f4;
+    color: #333;
+    height: 60px;
+    padding: 10px;
+}
+
+.navbar {
+    background: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+}
+
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 15px;
+}
+
+.navbar a:hover {
+    background: #555;
+}
+
+.body-content {
+    padding: 20px;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 20px;
+    border-top: 1px solid #ccc;
+}
+
+.container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin: 20px;
+}
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 10px;
+    width: 300px;
+}
+
+.card h2 {
+    margin-bottom: 10px;
+}
+
+.task-list {
+    padding: 0;
+    list-style: none;
+}
+
+.task-item {
+    margin-bottom: 5px;
+}
