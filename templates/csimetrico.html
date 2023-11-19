@@ -1,37 +1,53 @@
 {% extends "layout.html" %}
 {% block title %}
-C. Simétrico
+C. Asimétrico
 {% endblock %}
 {% block content %}
-<h1>Encriptar y desencriptar mensaje con AES</h1>
+<h1>Algoritmo Simétrico</h1>
 
-    <h2>Encriptar Mensaje</h2>
-    <form method="post">
-        <label for="message">Mensaje:</label><br>
-        <input type="text" id="message" name="message"><br><br>
-        <label for="key">Clave:</label><br>
-        <input type="text" id="key" name="key"><br><br>
-        <input type="hidden" name="mode" value="encrypt">
-        <input type="submit" value="Encriptar">
+    <h2>Encriptado</h2>
+    <form method="post" enctype="multipart/form-data">
+        <label for="archivo">Seleccionar archivo:</label>
+        <input id="archivo" type="file" name="archivo">
+        <br><br>
+        <label>Algoritmo para la encriptación:</label>
+        <label for="des">AES</label>
+        <input type="radio" id="aes" name="algoritmo" value="AES">
+        <label for="algoritmo">DES</label>
+        <input type="radio" id="des" name="algoritmo" value="DES">
+        <br><br>
+        <label>Almacenamiento para la encriptación:</label>
+        <label for="local">Local</label>
+        <input type="radio" id="local" name="almacenamiento" value="local">
+        <label for="compartida">Compartida</label>
+        <input type="radio" id="compartida" name="almacenamiento" value="Compartida">
+        <br><br>
+        <input type="submit" name="encriptar" value="Encriptar">
     </form>
 
+    <h2>Desencriptado</h2>
+    <form method="post" enctype="multipart/form-data">
+        <label for="archivo">Seleccionar archivo encriptado:</label>
+        <input id="archivo" type="file" name="archivo"><br><br>
+        <label for="clave">Seleccionar archivo clave simétrica:</label>
+        <input id="clave" type="file" name="clave">
+        <br><br>
+        <label>Algoritmo para la desencriptación:</label>
+        <label for="des">AES</label>
+        <input type="radio" id="aes" name="algoritmo" value="AES">
+        <label for="algoritmo">DES</label>
+        <input type="radio" id="des" name="algoritmo" value="DES">
+        <br><br>
+        <input type="submit" name="desencriptar" value="Desencriptar">
+    </form>
+
+    <!-- Desde aquí lanzará los errores que se produzcan en la introducción de datos  -->
     {% if encrypted_message %}
-        <h2>Mensaje Encriptado:</h2>
-        <p>{{ encrypted_message }}</p>
+        
     {% endif %}
 
-    <h2>Desencriptar Mensaje</h2>
-    <form method="post">
-        <label for="encrypted_message">Mensaje Encriptado:</label><br>
-        <input type="text" id="encrypted_message" name="message"><br><br>
-        <label for="key_decrypt">Clave:</label><br>
-        <input type="text" id="key_decrypt" name="key"><br><br>
-        <input type="hidden" name="mode" value="decrypt">
-        <input type="submit" value="Desencriptar">
-    </form>
-
-    {% if decrypted_message %}
-        <h2>Mensaje:</h2>
-        <p>{{ decrypted_message }}</p>
+    <!-- Desde aquí lanzará los errores o éxito en el proceso de encriptación  -->
+    {% if encrypted_message %}
+        
     {% endif %}
 {% endblock %}
