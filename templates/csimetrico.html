@@ -7,6 +7,7 @@ C. Asimétrico
 
     <h2>Encriptado</h2>
     <form method="post" enctype="multipart/form-data">
+        <input type="hidden" name="modo" value="encriptacion">
         <label for="archivo">Seleccionar archivo:</label>
         <input id="archivo" type="file" name="archivo">
         <br><br>
@@ -20,13 +21,14 @@ C. Asimétrico
         <label for="local">Local</label>
         <input type="radio" id="local" name="almacenamiento" value="local">
         <label for="compartida">Compartida</label>
-        <input type="radio" id="compartida" name="almacenamiento" value="Compartida">
+        <input type="radio" id="compartida" name="almacenamiento" value="compartida">
         <br><br>
         <input type="submit" name="encriptar" value="Encriptar">
     </form>
 
     <h2>Desencriptado</h2>
     <form method="post" enctype="multipart/form-data">
+        <input type="hidden" name="modo" value="desencriptacion">
         <label for="archivo">Seleccionar archivo encriptado:</label>
         <input id="archivo" type="file" name="archivo"><br><br>
         <label for="clave">Seleccionar archivo clave simétrica:</label>
@@ -41,7 +43,7 @@ C. Asimétrico
         <input type="submit" name="desencriptar" value="Desencriptar">
     </form>
 
-    <!-- Desde aquí lanzará los errores que se produzcan en la introducción de datos  -->
+    <!-- Desde aquí lanzará los errores o éxito que se produzcan en la introducción de datos  -->
     {% if encrypted_message %}
         
     {% endif %}

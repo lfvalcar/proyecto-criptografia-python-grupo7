@@ -1,2 +1,5 @@
-# Carpeta para realizar pruebas
-pruebas
+# Carpeta de desarrollo de funciones 
+desarrollo
+
+# Omitimos cualquier archivo utilizado en las pruebas
+data/archivos/*
