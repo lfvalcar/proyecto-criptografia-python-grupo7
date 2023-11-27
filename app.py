@@ -6,6 +6,7 @@ from flask import Flask, render_template, request
 import funciones.functions as f
 import funciones.functions_samba as fsmb
 import funciones.functions_flask as fflask
+import funciones.functions_salva as fsalva
 
 app = Flask(__name__)
 
@@ -33,6 +34,9 @@ def csimetrico():
             if algoritmo=='AES': # Se produce la encriptación simétrica con AES
                 return render_template("csimetrico.html")
             elif algoritmo=='DES': # Se produce la encriptación simétrica con DES
+                ruta_archivo=fflask.subir_archivo(archivo)
+                clave=fsalva.generador_claves()
+                ruta_archivo_encriptado,ruta_archivo_clave=fsalva.cifrado(ruta_archivo,clave)
                 return render_template("csimetrico.html")
 
             # Almacenamiento
@@ -49,6 +53,9 @@ def csimetrico():
             if algoritmo=='AES': # Se produce la desencriptación simétrica con AES
                 return render_template("csimetrico.html")
             elif algoritmo=='DES': # Se produce la desencriptación simétrica con DES
+                ruta_archivo=fflask.subir_archivo(archivo)
+                ruta_archivo_clave=fflask.subir_archivo(archivo)
+                fsalva.descifrado(ruta_archivo,ruta_archivo_clave)
                 return render_template("csimetrico.html")
 
     return render_template("csimetrico.html")
