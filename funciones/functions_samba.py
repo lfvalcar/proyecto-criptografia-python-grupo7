@@ -79,9 +79,8 @@ def listar_archivos_smb(recurso_compartido,conexion):
     # archivo --> archivo enviado por el usuario
     # recurso_compartido --> carpeta compartida del servidor donde listar los archivos
     # conexion --> conexion creada para utilizar para acceder al servidor
-def subir_archivo_smb(ruta_archivo_local,archivo,recurso_compartido,conexion):
+def subir_archivo_smb(ruta_archivo_local,nombre_archivo,recurso_compartido,conexion):
     try:
-        nombre_archivo=archivo.filename # Obtenemos el nombre del archivo
         with open(ruta_archivo_local, 'rb') as archivo:
             if nombre_archivo.endswith('.enc'): # Si el archivo subido es .enc se enviará a la carpeta de encriptados
                 ruta_archivo_remoto=archivos_encriptados_remoto+'/'+nombre_archivo # Ruta del archivo completa remoto donde se ubicará

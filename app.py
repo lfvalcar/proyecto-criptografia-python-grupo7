@@ -25,28 +25,30 @@ def csimetrico():
         archivo=request.files['archivo'] # Archivo a cifrar
         algoritmo=request.form['algoritmo'] # Algortimo con el que se va a encriptar o desencriptar
         modo=request.form['modo'] # Objetivo (encriptar o desencriptar)
-
         # Encriptado
-        if modo=='encriptar': # Se inicia la encriptacion
+        if modo=='encriptacion': # Se inicia la encriptacion
             almacenamiento=request.form['almacenamiento'] # Donde se almacena el resultado
             
             # Algoritmo
             if algoritmo=='AES': # Se produce la encriptación simétrica con AES
-                return render_template("csimetrico.html")
+                print('hola')
             elif algoritmo=='DES': # Se produce la encriptación simétrica con DES
-                ruta_archivo=fflask.subir_archivo(archivo)
-                clave=fsalva.generador_claves()
-                ruta_archivo_encriptado,ruta_archivo_clave=fsalva.cifrado(ruta_archivo,clave)
-                return render_template("csimetrico.html")
+                ruta_archivo=fflask.subir_archivo(archivo) # Se sube el archivo a la aplicación para el proceso
+                clave=fsalva.generador_claves() # Se genera la clave necesaria para el cifrado simétrico DES
+                ruta_archivo_encriptado,ruta_archivo_clave,nombre_archivo_encriptado,nombre_archivo_clave=fsalva.cifrado(ruta_archivo,clave) # Se cifra el archivo y devuelve: el archivo encriptado,archivo con la clave y sus respectivos nombres
 
             # Almacenamiento
             if almacenamiento=='local': # Se almacena los resultados de la encriptación en local
                 return render_template("csimetrico.html")
             elif almacenamiento=='compartida': # Se almacena los resultados de la encriptación en remoto
+                conexion=fsmb.conexion_smb('luis','LuisSAD7')
+                fsmb.subir_archivo_smb(ruta_archivo_encriptado,nombre_archivo_encriptado,'GrupoSAD7',conexion)
+                conexion=fsmb.conexion_smb('luis','LuisSAD7')
+                fsmb.subir_archivo_smb(ruta_archivo_clave,nombre_archivo_clave,'GrupoSAD7',conexion)
                 return render_template("csimetrico.html")
             
         # Desencriptado
-        if modo=='desencriptar': # Se inicia la desencriptación
+        if modo=='desencriptacion': # Se inicia la desencriptación
             clave=request.files['clave'] # Archivo con la clave simétrica
 
             # Algoritmo

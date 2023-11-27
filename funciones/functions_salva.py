@@ -32,6 +32,8 @@ def cifrado(ruta_archivo, key):
     # Definir rutas para el archivo encriptado y la clave
     ruta_archivo_encriptado = ruta_archivo + '.enc'
     ruta_archivo_clave = ruta_archivo + '.des'
+    nombre_archivo_encriptado = ruta_archivo_encriptado[14:]
+    nombre_archivo_clave = ruta_archivo_clave[14:]
 
     # Leer el contenido del archivo en modo binario
     with open(ruta_archivo, 'rb') as archivo:
@@ -55,7 +57,7 @@ def cifrado(ruta_archivo, key):
         archivo.write(key)
 
     # Devolver las rutas de los archivos encriptados y la clave
-    return ruta_archivo_encriptado, ruta_archivo_clave
+    return ruta_archivo_encriptado,ruta_archivo_clave,nombre_archivo_encriptado,nombre_archivo_clave
 
 def descifrado(ruta_archivo_encriptado, ruta_archivo_clave):
     # Crear la ruta para el archivo desencriptado
@@ -88,11 +90,3 @@ def descifrado(ruta_archivo_encriptado, ruta_archivo_clave):
 
     # Devolver la ruta del archivo descifrado
     return ruta_archivo_desencriptado
-
-# USO
-# Ruta archivo a encriptar
-ruta_archivo='pruebas/hola.txt'
-
-key=generador_claves()
-ruta_archivo_encriptado,ruta_archivo_clave=cifrado(ruta_archivo,key)
-descifrado(ruta_archivo_encriptado,ruta_archivo_clave)
