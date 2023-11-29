@@ -59,7 +59,7 @@ def csimetrico():
 
             # Almacenamiento
             if almacenamiento=='local': # Se almacena los resultados de la encriptación en local
-                return render_template("csimetrico.html")
+                return fflask.bajar_archivo(ruta_archivo_encriptado)
             elif almacenamiento=='compartida': # Se almacena los resultados de la encriptación en remoto
                 cookie=fflask.leer_credencial() # Comprobar si tenemos credenciales guardadas
                 
