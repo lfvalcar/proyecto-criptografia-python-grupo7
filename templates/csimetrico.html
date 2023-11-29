@@ -26,6 +26,10 @@ C. Asimétrico
         <input type="submit" name="encriptar" value="Encriptar">
     </form>
 
+    {% if cookie==False %}
+        <p>Para utilizar el almacenamiento compartido, es necesario iniciar sesión <a href="/">aquí</a></p>
+    {% endif %}
+
     <h2>Desencriptado</h2>
     <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="modo" value="desencriptacion">
@@ -42,11 +46,6 @@ C. Asimétrico
         <br><br>
         <input type="submit" name="desencriptar" value="Desencriptar">
     </form>
-
-    <!-- Desde aquí lanzará los errores o éxito que se produzcan en la introducción de datos  -->
-    {% if encrypted_message %}
-        
-    {% endif %}
 
     <!-- Desde aquí lanzará los errores o éxito en el proceso de encriptación  -->
     {% if encrypted_message %}
