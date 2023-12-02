@@ -18,13 +18,13 @@ def home():
             
             if accion=='fin': # Si esa acción es "fin", entonces se borran las credenciales (cerrar sesión)
                 fflask.borrar_credencial() # Borrar la credencial y archivos de la sesión
-            elif accion=='inicio': # Si esa acción es "inicio", entonces se guardan las nuevas credenciales
+            elif accion=='inicio': # Si esa acción es "inicio", entonces se guardan las nuevas credenciales (inciar sesión)
                 # Nuevas credenciales envíadas por el nuevo usuario
                 usuario=request.form['usuario']
                 password=request.form['password']
                 recurso_compartido=request.form['carpeta_compartida']
-                
-                fflask.escribir_credencial(usuario,password,recurso_compartido) # Se guarda para futuros inicios
+                fsmb.conexion_smb(usuario,password,recurso_compartido)
+                fflask.escribir_credencial(usuario,password,recurso_compartido) # Se guardan para futuros inicios de sesión
 
     cookie=fflask.leer_credencial() # Comprobar si tenemos credenciales guardadas
 
@@ -39,6 +39,10 @@ def home():
 # ALGORITMO SIMÉTRICO
 @app.route("/csimetrico/", methods=['GET','POST'])
 def csimetrico():
+     # Variables que almacenarán el resultado del desencriptado y encriptado
+    resultado_desencriptado=None
+    resultado_encriptado=None
+    
     if request.method == 'POST': # El usuario envía una solicitud de encriptación o desencriptación
         # Traer del html los datos introducidos por el usuario a variables
         archivo=request.files['archivo'] # Archivo a cifrar
@@ -55,11 +59,11 @@ def csimetrico():
             elif algoritmo=='DES': # Se produce la encriptación simétrica con DES
                 ruta_archivo=fflask.subir_archivo(archivo) # Se sube el archivo a la aplicación para el proceso
                 clave=fsalva.generador_claves() # Se genera la clave necesaria para el cifrado simétrico DES
-                ruta_archivo_encriptado,ruta_archivo_clave,nombre_archivo_encriptado,nombre_archivo_clave=fsalva.cifrado(ruta_archivo,clave) # Se cifra el archivo y devuelve: el archivo encriptado,archivo con la clave y sus respectivos nombres
+                ruta_archivo_encriptado,ruta_archivo_clave,nombre_archivo_encriptado,nombre_archivo_clave,resultado_encriptado=fsalva.cifrado(ruta_archivo,clave) # Se cifra el archivo y devuelve: el archivo encriptado,archivo con la clave,sus respectivos nombres y el resultado del proceso
 
             # Almacenamiento
             if almacenamiento=='local': # Se almacena los resultados de la encriptación en local
-                return fflask.bajar_archivo(ruta_archivo_encriptado)
+                fflask.descargar_archivos(ruta_archivo_encriptado,ruta_archivo_clave)
             elif almacenamiento=='compartida': # Se almacena los resultados de la encriptación en remoto
                 cookie=fflask.leer_credencial() # Comprobar si tenemos credenciales guardadas
                 
@@ -73,8 +77,6 @@ def csimetrico():
                 
                 conexion=fsmb.conexion_smb(usuario,password) # Se produce la conexión
                 fsmb.subir_archivo_smb(ruta_archivo_clave,nombre_archivo_clave,recurso_compartido,conexion) # Subida del archivo clave
-                
-                return render_template("csimetrico.html")
             
         # Desencriptado
         if modo=='desencriptacion': # Se inicia la desencriptación
@@ -86,10 +88,16 @@ def csimetrico():
             elif algoritmo=='DES': # Se produce la desencriptación simétrica con DES
                 ruta_archivo=fflask.subir_archivo(archivo) # Se sube el archivo a la aplicación para trabajar con él
                 ruta_archivo_clave=fflask.subir_archivo(clave) # Se sube la clave a la aplicación
-                ruta_archivo_desencriptado=fsalva.descifrado(ruta_archivo,ruta_archivo_clave) # Se produce el descifrado 
-                return fflask.bajar_archivo(ruta_archivo_desencriptado)
+                ruta_archivo_desencriptado,resultado_desencriptado=fsalva.descifrado(ruta_archivo,ruta_archivo_clave) # Se produce el descifrado 
+                return fflask.descargar_archivos(ruta_archivo_desencriptado) # Se envía el archivo al cliente
 
-    return render_template("csimetrico.html")
+    # Dependiendo de los resultados se mostrarán mensajes de éxito o errores
+    if resultado_encriptado==True:
+        return render_template("csimetrico.html",resultado_encriptado=True) # Éxito de la encriptación
+    elif resultado_desencriptado==True:
+        return render_template("csimetrico.html",resultado_desencriptado=True) # Éxito de la desencriptación
+    else:
+        return render_template("csimetrico.html") # Página por defecto
 
 # ALGORITMO ASIMÉTRICO
 @app.route("/casimetrico/")
@@ -119,7 +127,7 @@ def listar_archivos():
                 
         conexion=fsmb.conexion_smb(usuario,password) # Se realiza la conexión
         ruta_archivo_descargado=fsmb.bajar_archivo_smb(nombre_archivo,ruta_archivo_remoto,recurso_compartido,conexion) # Se baja el archivo a la aplición
-        return fflask.bajar_archivo(ruta_archivo_descargado) # Se envía el archivo al cliente
+        return fflask.descargar_archivos(ruta_archivo_descargado) # Se envía el archivo al cliente
 
     return render_template("listado_archivos.html")
 

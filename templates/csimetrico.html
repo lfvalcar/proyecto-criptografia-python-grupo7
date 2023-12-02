@@ -1,9 +1,9 @@
 {% extends "layout.html" %}
 {% block title %}
-C. Asimétrico
+C. Simétrico
 {% endblock %}
 {% block content %}
-<h1>Algoritmo Simétrico</h1>
+<h1>Cifrado y descifrado Simétrico</h1>
 
     <h2>Encriptado</h2>
     <form method="post" enctype="multipart/form-data">
@@ -30,6 +30,10 @@ C. Asimétrico
         <p>Para utilizar el almacenamiento compartido, es necesario iniciar sesión <a href="/">aquí</a></p>
     {% endif %}
 
+    {% if resultado_encriptado==True %}
+        <p>El archivo se ha encriptado con éxito</p>
+    {% endif %}
+
     <h2>Desencriptado</h2>
     <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="modo" value="desencriptacion">
@@ -47,8 +51,7 @@ C. Asimétrico
         <input type="submit" name="desencriptar" value="Desencriptar">
     </form>
 
-    <!-- Desde aquí lanzará los errores o éxito en el proceso de encriptación  -->
-    {% if encrypted_message %}
-        
+    {% if resultado_desencriptado==True %}
+        <p>El archivo se ha desencriptado con éxito</p>
     {% endif %}
 {% endblock %}

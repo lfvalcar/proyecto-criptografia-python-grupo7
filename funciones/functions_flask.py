@@ -5,6 +5,9 @@ import os
 import glob
 from werkzeug.utils import secure_filename
 from flask import send_file
+import tkinter
+from tkinter import filedialog
+from shutil import copyfile
 
 ############################
 #####VARIABLES GLOBALES#####
@@ -27,10 +30,33 @@ def subir_archivo(archivo):
     return ruta_archivo_subido # Devolver la ruta del archivo subido a la aplicacion y su nombre
 
 # DESCARGAR ARCHIVO DE FLASK
+# Seleccionar la ruta en el ordenador del usuario para almacenar el archivo
+# Parámetros de entrada:
+    # titulo --> título de la ventana emergente
+def ventana_dialogo_directorio(titulo):
+    ventana=tkinter.Tk() # Ventana emergente
+    ventana.withdraw() # Dibujar ventana
+    directorio_destino=filedialog.askdirectory(title=titulo) # Obtener la respuesta de la selección en la ventana
+    
+    return directorio_destino
+
+# Guardar el/los archivos en el directorio seleccionado
 # Parametros de enrada:
-    # ruta_archivo_flask --> ruta del archivo ubicado en la aplicacion a descargar por el usuario
-def bajar_archivo(ruta_archivo_local):
-    return send_file(ruta_archivo_local, as_attachment=True) # Usar send_file para enviar el archivo al usuario
+    # directorio_destino --> ruta del archivo ubicado en la aplicacion a descargar por el usuario
+    # *archivo --> lista de archivos a descargar
+def descargar_archivos(*archivos):
+    if len(archivos)>1: # Si es una archivo se descarga con send_file y si no se procede a la descargar de varios archivos
+        for archivo in archivos:
+            nombre_archivo=os.path.basename(archivo) # Obtener el nombre del archivo
+            titulo='¿Donde guardamos: '+nombre_archivo+'?' # Título de la ventana de selección
+            directorio_destino=ventana_dialogo_directorio(titulo) # Lanzar ventana emergente
+        
+            if not os.path.exists(directorio_destino): # Crear el directorio si no existe
+                os.makedirs(directorio_destino)
+        
+            ruta_destino=os.path.join(directorio_destino, nombre_archivo) # Construir la ruta de destino
+            copyfile(archivo, ruta_destino) # Copiar el archivo al directorio de destino
+    return send_file(archivos[0],as_attachment=True) # Enviar el archivo
 
 ##################################
 #####GESTIÓN DE LA CREDENCIAL#####
