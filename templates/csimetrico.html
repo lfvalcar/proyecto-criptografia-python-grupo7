@@ -27,11 +27,11 @@ C. Simétrico
     </form>
 
     {% if cookie==False %}
-        <p>Para utilizar el almacenamiento compartido, es necesario iniciar sesión <a href="/">aquí</a></p>
+        <p><u>Para utilizar el almacenamiento compartido, es necesario iniciar sesión <a href="/">aquí</a></u></p>
     {% endif %}
 
     {% if resultado_encriptado==True %}
-        <p>El archivo se ha encriptado con éxito</p>
+        <p><strong>archivo se ha encriptado con éxito</strong></p>
     {% endif %}
 
     <h2>Desencriptado</h2>
@@ -52,6 +52,6 @@ C. Simétrico
     </form>
 
     {% if resultado_desencriptado==True %}
-        <p>El archivo se ha desencriptado con éxito</p>
+        <p><strong>El archivo se ha desencriptado con éxito</strong></p>
     {% endif %}
 {% endblock %}

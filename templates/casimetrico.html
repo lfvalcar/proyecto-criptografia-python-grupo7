@@ -1,7 +1,83 @@
 {% extends "layout.html" %}
 {% block title %}
-C. Simétrico
+C. Asimétrico
 {% endblock %}
 {% block content %}
-<p>Funcionalidades de cifrado simétrico</p>
+<h1>Cifrado y descifrado Asimétrico</h1>
+
+    <h2>Generador de par de claves</h2>
+    <form method="post">
+        <input type="hidden" name="modo" value="generacion">
+        <label for="nombre">Nombre: </label>
+        <input id="nombre" type="text" name="nombre"><br><br>
+        <label for="correo">Correo electrónico: </label>
+        <input id="correo" type="email" name="correo"><br><br>
+        <input type="submit" name="generacion" value="Generar par de claves">
+    </form>
+
+    {% if resultado_generacion==True %}
+        <p><strong>par de claves generado con éxito</strong></p>
+    {% endif %}
+
+    <h2>Importación de claves públicas</h2>
+    <form method="post" enctype="multipart/form-data">
+        <input type="hidden" name="modo" value="importacion">
+        <label for="archivo">Seleccionar archivo:</label>
+        <input id="archivo" type="file" name="archivo"><br><br>
+        <label for="nombre">Nombre: </label>
+        <input id="nombre" type="text" name="nombre"><br><br>
+        <label for="correo">Correo electrónico: </label>
+        <input id="correo" type="email" name="correo"><br><br>
+        <label for="fingerprint">Identificador del par de claves: </label>
+        <input id="fingerprint" type="text" name="fingerprint">
+        <br><br>
+        <input type="submit" name="importacion" value="Importar">
+    </form>
+
+    {% if cookieIn==False %}
+        <p><u>Para utilizar el almacenamiento compartido, es necesario iniciar sesión <a href="/">aquí</a></u></p>
+    {% endif %}
+
+    {% if resultado_importacion==True %}
+        <p><strong>archivo se ha importado con éxito</strong></p>
+    {% endif %}
+
+    <h2>Encriptado</h2>
+    <form method="post" enctype="multipart/form-data">
+        <p><u>Para realizar el encriptado asimétrico, antes hace falta elegir una clave pública <a href="/listadoArchivos">aquí</a></u></p>
+        <input type="hidden" name="clave" value={{nombre_archivo}}>
+        <input type="hidden" name="modo" value="encriptacion">
+        <label for="archivo">Seleccionar archivo:</label>
+        <input id="archivo" type="file" name="archivo">
+        <br><br>
+        <label>Almacenamiento para la encriptación:</label>
+        <label for="local">Local</label>
+        <input type="radio" id="local" name="almacenamiento" value="local">
+        <label for="compartida">Compartida</label>
+        <input type="radio" id="compartida" name="almacenamiento" value="compartida">
+        <br><br>
+        <input type="submit" name="encriptar" value="Encriptar">
+    </form>
+
+    {% if cookieEnc==False %}
+        <p><u>Para utilizar el almacenamiento compartido, es necesario iniciar sesión <a href="/">aquí</a></u></p>
+    {% endif %}
+
+    {% if resultado_encriptado==True %}
+        <p><strong>archivo se ha encriptado con éxito</strong></p>
+    {% endif %}
+
+    <h2>Desencriptado</h2>
+    <form method="post" enctype="multipart/form-data">
+        <input type="hidden" name="modo" value="desencriptacion">
+        <label for="archivo">Seleccionar archivo encriptado:</label>
+        <input id="archivo" type="file" name="archivo"><br><br>
+        <label for="fingerprint">Identificador del par de claves: </label>
+        <input id="fingerprint" type="text" name="fingerprint"><br><br>
+        <input type="submit" name="desencriptar" value="Desencriptar">
+    </form>
+
+    {% if resultado_desencriptado==True %}
+        <p>El archivo se ha desencriptado con éxito</p>
+    {% endif %}
 {% endblock %}

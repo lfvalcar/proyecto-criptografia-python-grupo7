@@ -57,12 +57,23 @@ def listar_archivos_smb(recurso_compartido,conexion):
                     if not archivo.isDirectory: # Omitimos los directorios
                         ruta_remoto='/'+carpeta.filename+'/'+archivo.filename # La ruta completa remota de cada archivo
                         # Generar por cada archivo un formulario html
-                        listado_html+='<form method="post"'
+                        listado_html+='<form method="post">'
                         listado_html+='<p>'+archivo.filename+'</p>' # Nombre del archivo
                         listado_html+='<input type="hidden" name="nombre_archivo" value="'+archivo.filename+'">' # Nombre del archivo
                         listado_html+='<input type="hidden" name="ruta_archivo_remoto" value="'+ruta_remoto+'">' # Ruta completa remota del archivo
-                        listado_html+='<input type="submit" name="descargar" value="Descargar">' # Botón para efectuar el post y descargar el archivo
+                        listado_html+='<input type="submit" name="accion" value="Descargar">' # Botón para efectuar el post y descargar el archivo
                         listado_html+='</form><br>'
+                        listado_html+='<form method="post">'
+                        listado_html+='<input type="hidden" name="nombre_archivo" value="'+archivo.filename+'">' # Nombre del archivo
+                        listado_html+='<input type="hidden" name="ruta_archivo_remoto" value="'+ruta_remoto+'">' # Ruta completa remota del archivo
+                        listado_html+='<input type="submit" name="accion" value="Utilizar">' # Botón para efectuar el post y descargar el archivo
+                        listado_html+='</form><br>'
+                        if carpeta.filename=='claves_publicas':
+                            listado_html+='<form method="post">'
+                            listado_html+='<input type="hidden" name="nombre_archivo" value="'+archivo.filename+'">' # Nombre del archivo
+                            listado_html+='<input type="hidden" name="ruta_archivo_remoto" value="'+ruta_remoto+'">' # Ruta completa remota del archivo
+                            listado_html+='<input type="submit" name="accion" value="Utilizar">' # Botón para efectuar el post y descargar el archivo
+                            listado_html+='</form><br>'
     finally:
         conexion.close() # Cerrar la conexion
     
@@ -88,7 +99,7 @@ def subir_archivo_smb(ruta_archivo_local,nombre_archivo,recurso_compartido,conex
             elif nombre_archivo.endswith('.des') or nombre_archivo.endswith('.aes'): # Si el archivo subido es .des o a.aes se enviará a la carpeta de claves simétricas 
                 ruta_archivo_remoto=claves_simetricas_remoto+'/'+nombre_archivo 
                 conexion.storeFile(recurso_compartido,ruta_archivo_remoto,archivo) 
-            elif nombre_archivo.endswith('.pub'): # Si el archivo subido es .pub se enviará a la carpeta de claves públicas
+            elif nombre_archivo.endswith('.pem'): # Si el archivo subido es .pub se enviará a la carpeta de claves públicas
                 ruta_archivo_remoto=claves_publicas_remoto+'/'+nombre_archivo
                 conexion.storeFile(recurso_compartido,ruta_archivo_remoto,archivo)
     finally:

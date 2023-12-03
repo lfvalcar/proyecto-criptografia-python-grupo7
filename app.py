@@ -23,7 +23,6 @@ def home():
                 usuario=request.form['usuario']
                 password=request.form['password']
                 recurso_compartido=request.form['carpeta_compartida']
-                fsmb.conexion_smb(usuario,password,recurso_compartido)
                 fflask.escribir_credencial(usuario,password,recurso_compartido) # Se guardan para futuros inicios de sesión
 
     cookie=fflask.leer_credencial() # Comprobar si tenemos credenciales guardadas
@@ -39,7 +38,7 @@ def home():
 # ALGORITMO SIMÉTRICO
 @app.route("/csimetrico/", methods=['GET','POST'])
 def csimetrico():
-     # Variables que almacenarán el resultado del desencriptado y encriptado
+    # Variables que almacenarán el resultado del desencriptado y encriptado
     resultado_desencriptado=None
     resultado_encriptado=None
     
@@ -100,9 +99,71 @@ def csimetrico():
         return render_template("csimetrico.html") # Página por defecto
 
 # ALGORITMO ASIMÉTRICO
-@app.route("/casimetrico/")
+@app.route("/casimetrico/", methods=['GET','POST'])
 def casimetrico():
-    return render_template("casimetrico.html")
+    # Variables que almacenarán el resultado del desencriptado y encriptado
+    resultado_desencriptado=None
+    resultado_encriptado=None
+    resultado_importacion=None
+    resultado_generacion=None
+    
+    if request.method == 'POST': # El usuario envía una solicitud de encriptación o desencriptación
+        # Traer del html los datos introducidos por el usuario a variables
+        modo=request.form['modo'] # Objetivo (encriptar o desencriptar)
+
+        if modo=='generacion':
+            nombre_real=request.form['nombre']
+            correo_real=request.form['correo']
+
+        elif modo=='importacion':
+                archivo=request.files['archivo'] # Archivo a cifrar
+                nombre_real=request.form['nombre']
+                correo_real=request.form['correo']
+                keyid_real=request.form['fingerprint']
+
+                cookie=fflask.leer_credencial() # Comprobar si tenemos credenciales guardadas
+                
+                if cookie==False: # Si no hay credencial almacenada avisa al usuario de que hace falta inciar sesión
+                    return render_template("casimetrico.html",cookieIn=False)
+                
+                usuario,password,recurso_compartido=fflask.extraer_credencial() # Si hay credenciales se extraen
+
+                ruta_archivo_local=fflask.subir_archivo(archivo)
+
+                resultado_importacion=fflask.escribir_propiedades(archivo.filename,ruta_archivo_local,nombre_real,correo_real,keyid_real)
+
+                conexion=fsmb.conexion_smb(usuario,password)
+                fsmb.subir_archivo_smb(ruta_archivo_local,archivo.filename,recurso_compartido,conexion)
+
+        # Encriptado
+        if modo=='encriptacion': # Se inicia la encriptacion
+            archivo=request.files['archivo'] # Archivo a cifrar
+            almacenamiento=request.form['almacenamiento'] # Donde se almacena el resultado
+
+            # Almacenamiento
+            if almacenamiento=='local': # Se almacena los resultados de la encriptación en local
+                print('pruebas')
+            elif almacenamiento=='compartida': # Se almacena los resultados de la encriptación en remoto
+                cookie=fflask.leer_credencial() # Comprobar si tenemos credenciales guardadas
+                
+                if cookie==False: # Si no hay credencial almacenada avisa al usuario de que hace falta inciar sesión
+                    return render_template("casimetrico.html",cookieEnc=False)
+                
+                usuario,password,recurso_compartido=fflask.extraer_credencial() # Si hay credenciales se extraen
+            
+        # Desencriptado
+        elif modo=='desencriptacion': # Se inicia la desencriptación
+            archivo=request.files['archivo'] # Archivo a cifrar
+
+    # Dependiendo de los resultados se mostrarán mensajes de éxito o errores
+    if resultado_encriptado==True:
+        return render_template("casimetrico.html",resultado_encriptado=True) # Éxito de la encriptación
+    elif resultado_desencriptado==True:
+        return render_template("casimetrico.html",resultado_desencriptado=True) # Éxito de la desencriptación
+    elif resultado_importacion==True:
+        return render_template("casimetrico.html",resultado_importacion=True)
+    else:
+        return render_template("casimetrico.html") # Página por defecto
 
 # ALGORITMO HÍBRIDO
 @app.route("/chibrido/")
@@ -124,10 +185,15 @@ def listar_archivos():
     if request.method=='POST': # El usuario elige descargar un archivo
         nombre_archivo=request.form['nombre_archivo'] # Se obtiene el nombre del archivo seleccionado
         ruta_archivo_remoto=request.form['ruta_archivo_remoto'] # Se obtiene la ruta remota del archivo seleccionado
-                
+        accion=request.form['accion']
+
         conexion=fsmb.conexion_smb(usuario,password) # Se realiza la conexión
         ruta_archivo_descargado=fsmb.bajar_archivo_smb(nombre_archivo,ruta_archivo_remoto,recurso_compartido,conexion) # Se baja el archivo a la aplición
-        return fflask.descargar_archivos(ruta_archivo_descargado) # Se envía el archivo al cliente
+
+        if accion=='Descargar':
+            return fflask.descargar_archivos(ruta_archivo_descargado) # Se envía el archivo al cliente
+        elif accion=='Utilizar':
+            return render_template("casimetrico.html",nombre_archivo=nombre_archivo)
 
     return render_template("listado_archivos.html")
 

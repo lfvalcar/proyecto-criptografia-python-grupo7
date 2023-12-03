@@ -14,6 +14,7 @@ from shutil import copyfile
 ############################
 archivos_local='data/archivos' # Carpeta de la aplicacion para gestion de ficheros
 archivo_credencial='data/credencial' # Archivo donde de se almacena la credencial junto al recurso compartido
+archivo_propiedades='data/propiedades'
 
 ###################################################
 #####FUNCIONES DE GESTIÓN DE FICHEROS EN FLASK#####
@@ -99,3 +100,24 @@ def extraer_credencial():
         usuario, password, recurso_compartido=registro.split(':') # Gracias a que separamos por : al almcenar podemos separarlo por : al extraer
         
         return usuario,password,recurso_compartido # Devolver la credencial
+    
+###############################################
+#####PROPIEDADES DE LAS CLAVES ASIMÉTRICAS#####
+###############################################
+# ALMACENAR PROPIEDADES DE UNA CLAVE
+def escribir_propiedades(nombre_archivo,ruta_archivo_clave,nombre,email,id):
+    with open(archivo_propiedades,'a') as propiedades:
+        contenido=nombre_archivo+':'+ruta_archivo_clave+':'+nombre+':'+email+':'+id
+        propiedades.write(contenido)
+        return True
+
+# EXTRAER PROPIEDADES DE UNA CLAVE
+def extraer_propiedades(keyid):
+    with open(archivo_propiedades,'r') as propiedades:
+        registros=propiedades.readlines
+        for registro in registros:
+            nombre_archivo, ruta_archivo_clave, nombre, email, id=registro.split(':')
+            if keyid==id:
+                continue
+        
+        return nombre_archivo, ruta_archivo_clave, nombre, email, id

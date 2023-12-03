@@ -61,7 +61,7 @@ def cifrado(ruta_archivo, key):
 
 def descifrado(ruta_archivo_encriptado, ruta_archivo_clave):
     # Crear la ruta para el archivo desencriptado
-    ruta_archivo_desencriptado = ruta_archivo_encriptado[:-4] + '.desenc'
+    ruta_archivo_desencriptado = ruta_archivo_encriptado[:-4]
     print(ruta_archivo_desencriptado)
 
     # Leer el mensaje encriptado desde el archivo
