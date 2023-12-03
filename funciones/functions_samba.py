@@ -63,6 +63,17 @@ def listar_archivos_smb(recurso_compartido,conexion):
                         listado_html+='<input type="hidden" name="ruta_archivo_remoto" value="'+ruta_remoto+'">' # Ruta completa remota del archivo
                         listado_html+='<input type="submit" name="accion" value="Descargar">' # Botón para efectuar el post y descargar el archivo
                         listado_html+='</form><br>'
+                        listado_html+='<form method="post">'
+                        listado_html+='<input type="hidden" name="nombre_archivo" value="'+archivo.filename+'">' # Nombre del archivo
+                        listado_html+='<input type="hidden" name="ruta_archivo_remoto" value="'+ruta_remoto+'">' # Ruta completa remota del archivo
+                        listado_html+='<input type="submit" name="accion" value="Utilizar">' # Botón para efectuar el post y descargar el archivo
+                        listado_html+='</form><br>'
+                        if carpeta.filename=='claves_publicas':
+                            listado_html+='<form method="post">'
+                            listado_html+='<input type="hidden" name="nombre_archivo" value="'+archivo.filename+'">' # Nombre del archivo
+                            listado_html+='<input type="hidden" name="ruta_archivo_remoto" value="'+ruta_remoto+'">' # Ruta completa remota del archivo
+                            listado_html+='<input type="submit" name="accion" value="Utilizar">' # Botón para efectuar el post y descargar el archivo
+                            listado_html+='</form><br>'
     finally:
         conexion.close() # Cerrar la conexion
     
