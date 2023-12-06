@@ -1,6 +1,9 @@
 from Cryptodome.Cipher import DES
 from random import sample
-
+from Cryptodome.PublicKey import RSA
+from Cryptodome.Cipher import PKCS1_OAEP
+ruta_keyrings="data/keyrings"
+ruta_archivo="data/archivos"
 #GENERADOR DE CLAVES
 # Declaramos la función con un argumento (longitud de la contraseña)
 def generador_claves():
@@ -57,11 +60,11 @@ def cifrado(ruta_archivo, key):
         archivo.write(key)
 
     # Devolver las rutas de los archivos encriptados y la clave
-    return ruta_archivo_encriptado,ruta_archivo_clave,nombre_archivo_encriptado,nombre_archivo_clave,True
+    return ruta_archivo_encriptado,ruta_archivo_clave,nombre_archivo_encriptado,nombre_archivo_clave
 
 def descifrado(ruta_archivo_encriptado, ruta_archivo_clave):
     # Crear la ruta para el archivo desencriptado
-    ruta_archivo_desencriptado = ruta_archivo_encriptado[:-4]
+    ruta_archivo_desencriptado = ruta_archivo_encriptado[:-4] + '.desenc'
     print(ruta_archivo_desencriptado)
 
     # Leer el mensaje encriptado desde el archivo
@@ -89,4 +92,50 @@ def descifrado(ruta_archivo_encriptado, ruta_archivo_clave):
         archivo.write(decrypted_text)
 
     # Devolver la ruta del archivo descifrado
-    return ruta_archivo_desencriptado,True
+    return ruta_archivo_desencriptado
+
+
+def generar_claves_rsa():
+    key = RSA.generate(2048)
+    private_key = key.export_key()
+    public_key = key.publickey().export_key()
+
+
+    # Guardar las claves en archivos
+    clave_publica=ruta_keyrings+"/private_key.pem"
+    clave_privada=ruta_keyrings+"/public_key.pem"
+
+    with open(clave_publica, "wb") as private_file:
+        private_file.write(private_key)
+
+    with open(clave_privada, "wb") as public_file:
+        public_file.write(public_key)
+    return clave_privada,clave_publica
+
+def cifrar_rsa(archivo_original,nombre_archivo_original, clave_publica):
+    
+    key = RSA.import_key(clave_publica)
+    cipher = PKCS1_OAEP.new(key)
+    
+    with open(archivo_original, "rb") as file:
+        data = file.read()
+        ciphertext = cipher.encrypt(data)
+
+    archivo_cifrado=ruta_archivo+"/"+nombre_archivo_original
+    ruta_archivo_encriptado = archivo_cifrado + '.enc'
+    with open(archivo_cifrado, "wb") as file:
+        file.write(ciphertext)
+        return ruta_archivo_encriptado
+
+def descifrar_rsa(archivo_cifrado,clave_privada):
+    ruta_archivo_desencriptado_rsa = archivo_cifrado[:-4] 
+    key = RSA.import_key(clave_privada)
+    cipher = PKCS1_OAEP.new(key)
+    
+    with open(archivo_cifrado, "rb") as file:
+        ciphertext = file.read()
+        decrypted_data = cipher.decrypt(ciphertext)
+    
+    with open(ruta_archivo_desencriptado_rsa, "wb") as file:
+        file.write(decrypted_data)
+    return ruta_archivo_desencriptado_rsa

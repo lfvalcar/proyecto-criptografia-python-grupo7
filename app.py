@@ -110,11 +110,11 @@ def casimetrico():
     if request.method == 'POST': # El usuario envía una solicitud de encriptación o desencriptación
         # Traer del html los datos introducidos por el usuario a variables
         modo=request.form['modo'] # Objetivo (encriptar o desencriptar)
-
+        print(modo)
         if modo=='generacion':
             nombre_real=request.form['nombre']
             correo_real=request.form['correo']
-
+            clave_privada,clave_publica=fsalva.generar_claves_rsa()
         elif modo=='importacion':
                 archivo=request.files['archivo'] # Archivo a cifrar
                 nombre_real=request.form['nombre']
@@ -139,7 +139,9 @@ def casimetrico():
         if modo=='encriptacion': # Se inicia la encriptacion
             archivo=request.files['archivo'] # Archivo a cifrar
             almacenamiento=request.form['almacenamiento'] # Donde se almacena el resultado
-
+            archivo_original=fflask.subir_archivo(archivo)
+            archivo_cifrado=fsalva.cifrar_rsa(archivo_original,archivo.filename,clave_publica)
+            return fflask.descargar_archivos(archivo_cifrado)
             # Almacenamiento
             if almacenamiento=='local': # Se almacena los resultados de la encriptación en local
                 print('pruebas')
@@ -154,7 +156,9 @@ def casimetrico():
         # Desencriptado
         elif modo=='desencriptacion': # Se inicia la desencriptación
             archivo=request.files['archivo'] # Archivo a cifrar
-
+            archivo_cifrado_rsa=fflask.subir_archivo(archivo)
+            arhivo_descifrado_rsa=fsalva.descifrar_rsa(archivo_cifrado_rsa,clave_privada)
+            return fflask.descargar_archivos(arhivo_descifrado_rsa)
     # Dependiendo de los resultados se mostrarán mensajes de éxito o errores
     if resultado_encriptado==True:
         return render_template("casimetrico.html",resultado_encriptado=True) # Éxito de la encriptación
