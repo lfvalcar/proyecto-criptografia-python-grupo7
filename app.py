@@ -113,8 +113,16 @@ def casimetrico():
         print(modo)
         if modo=='generacion':
             nombre_real=request.form['nombre']
-            correo_real=request.form['correo']
-            clave_privada,clave_publica=fsalva.generar_claves_rsa()
+            cookie=fflask.leer_credencial() # Comprobar si tenemos credenciales guardadas
+                
+            if cookie==False: # Si no hay credencial almacenada avisa al usuario de que hace falta inciar sesión
+               return render_template("casimetrico.html",cookieIn=False)
+                
+            usuario,password,recurso_compartido=fflask.extraer_credencial() # Si hay credenciales se extraen
+            clave_privada,clave_publica,nombre_archivo_publica=fsalva.generar_claves_rsa(nombre_real)
+            print(clave_publica,nombre_archivo_publica)
+            conexion=fsmb.conexion_smb(usuario,password)
+            fsmb.subir_archivo_smb(clave_publica,nombre_archivo_publica,recurso_compartido,conexion)
         elif modo=='importacion':
                 archivo=request.files['archivo'] # Archivo a cifrar
                 nombre_real=request.form['nombre']
@@ -139,6 +147,8 @@ def casimetrico():
         if modo=='encriptacion': # Se inicia la encriptacion
             archivo=request.files['archivo'] # Archivo a cifrar
             almacenamiento=request.form['almacenamiento'] # Donde se almacena el resultado
+            clave=request.form['clave']
+            fsmb.bajar_archivo_smb(clave)
             archivo_original=fflask.subir_archivo(archivo)
             archivo_cifrado=fsalva.cifrar_rsa(archivo_original,archivo.filename,clave_publica)
             return fflask.descargar_archivos(archivo_cifrado)

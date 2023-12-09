@@ -95,22 +95,22 @@ def descifrado(ruta_archivo_encriptado, ruta_archivo_clave):
     return ruta_archivo_desencriptado
 
 
-def generar_claves_rsa():
+def generar_claves_rsa(nombre_real):
     key = RSA.generate(2048)
     private_key = key.export_key()
     public_key = key.publickey().export_key()
 
-
+    nombre_archivo_publica=nombre_real+".pem"
     # Guardar las claves en archivos
-    clave_publica=ruta_keyrings+"/private_key.pem"
-    clave_privada=ruta_keyrings+"/public_key.pem"
+    clave_publica=ruta_keyrings+"/"+nombre_archivo_publica
+    clave_privada=ruta_keyrings+"/"+nombre_real+".key"
 
     with open(clave_publica, "wb") as private_file:
         private_file.write(private_key)
 
     with open(clave_privada, "wb") as public_file:
         public_file.write(public_key)
-    return clave_privada,clave_publica
+    return clave_privada,clave_publica,nombre_archivo_publica
 
 def cifrar_rsa(archivo_original,nombre_archivo_original, clave_publica):
     
