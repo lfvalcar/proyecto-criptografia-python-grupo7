@@ -186,8 +186,61 @@ def casimetrico():
         return render_template("casimetrico.html") # Página por defecto
 
 # ALGORITMO HÍBRIDO
-@app.route("/chibrido/")
+@app.route("/chibrido/",methods=['GET','POST'])
 def chibrido():
+    if request.method == 'POST': # El usuario envía una solicitud de encriptación o desencriptación
+        # Traer del html los datos introducidos por el usuario a variables
+        archivo=request.files['archivo'] # Archivo a cifrar
+        algoritmo=request.form['algoritmo'] # Algortimo con el que se va a encriptar o desencriptar
+        modo=request.form['modo'] # Objetivo (encriptar o desencriptar)
+
+        # Encriptado
+        if modo=='encriptacion': # Se inicia la encriptacion
+            almacenamiento=request.form['almacenamiento'] # Donde se almacena el resultado
+            clave=request.files['clave_publica'] # Archivo a cifrar
+            clave_publica=fflask.subir_archivo(clave)
+
+            # Algoritmo
+            if algoritmo=='AES': # Se produce la encriptación simétrica con AES
+                print('hola')
+            elif algoritmo=='DES': # Se produce la encriptación simétrica con DES
+                ruta_archivo=fflask.subir_archivo(archivo) # Se sube el archivo a la aplicación para el proceso
+                clave=fsalva.generador_claves() # Se genera la clave necesaria para el cifrado simétrico DES
+                ruta_archivo_encriptado,ruta_archivo_clave,nombre_archivo_encriptado,nombre_archivo_clave=fsalva.cifrado(ruta_archivo,clave) # Se cifra el archivo y devuelve: el archivo encriptado,archivo con la clave,sus respectivos nombres y el resultado del proceso
+
+            archivo_cifrado,nombre_archivo_cifrado=fsalva.cifrar_rsa(ruta_archivo_clave,nombre_archivo_clave,clave_publica)
+            
+            # Almacenamiento
+            if almacenamiento=='local': # Se almacena los resultados de la encriptación en local
+                fflask.descargar_archivos(archivo_cifrado,ruta_archivo_encriptado)
+            elif almacenamiento=='compartida': # Se almacena los resultados de la encriptación en remoto
+                cookie=fflask.leer_credencial() # Comprobar si tenemos credenciales guardadas
+                
+                if cookie==False: # Si no hay credencial almacenada avisa al usuario de que hace falta inciar sesión
+                    return render_template("csimetrico.html",cookie=False)
+                
+                usuario,password,recurso_compartido=fflask.extraer_credencial() # Si hay credenciales se extraen
+                
+                conexion=fsmb.conexion_smb(usuario,password) # Se produce la conexión
+                fsmb.subir_archivo_smb(archivo_cifrado,nombre_archivo_cifrado,recurso_compartido,conexion) # Subida del archivo encriptado
+                
+                conexion=fsmb.conexion_smb(usuario,password) # Se produce la conexión
+                fsmb.subir_archivo_smb(ruta_archivo_encriptado,nombre_archivo_encriptado,recurso_compartido,conexion) # Subida del archivo clave
+                
+        # Desencriptado
+        elif modo=='desencriptacion': # Se inicia la desencriptación
+            archivo=request.files['archivo'] # Archivo a cifrar
+            clave_simetrica_encriptada=request.files['clave_simetrica_encriptada'] # Archivo a cifrar
+            clave_privada=request.files['clave_privada'] # Archivo a cifrar
+            ruta_archivo=fflask.subir_archivo(archivo)
+            ruta_clave_privada=fflask.subir_archivo(clave_privada)
+            ruta_clave_simetrica_encriptada=fflask.subir_archivo(clave_simetrica_encriptada)
+            archivo_descifrado_rsa=fsalva.descifrar_rsa(ruta_clave_simetrica_encriptada,ruta_clave_privada)
+
+            ruta_archivo_desencriptado=fsalva.descifrado(ruta_archivo,archivo_descifrado_rsa) # Se produce el descifrado 
+
+            return fflask.descargar_archivos(ruta_archivo_desencriptado)
+
     return render_template("chibrido.html")
 
 # LISTADO DE LOS ARCHIVOS COMPARTIDOS

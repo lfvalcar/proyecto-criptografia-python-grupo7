@@ -137,7 +137,7 @@ def descifrar_rsa(archivo_cifrado,ruta_clave_privada):
     
     clave_privada = open(ruta_clave_privada, "rb").read()
     
-    ruta_archivo_desencriptado_rsa = archivo_cifrado[:-4] 
+    ruta_archivo_desencriptado_rsa = archivo_cifrado[:-4] + '.desenc'
     key = RSA.import_key(clave_privada)
     cipher = PKCS1_OAEP.new(key)
     
