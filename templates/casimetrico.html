@@ -8,7 +8,7 @@ C. Asimétrico
     <h2>Generador de par de claves</h2>
     <form method="post">
         <input type="hidden" name="modo" value="generacion">
-        <label for="nombre">Nombre de las claves: </label>
+        <label for="nombre">Nombre del par de claves: </label>
         <input id="nombre" type="text" name="nombre"><br><br>
         <input type="submit" name="generacion" value="Generar par de claves">
     </form>
@@ -42,11 +42,11 @@ C. Asimétrico
 
     <h2>Encriptado</h2>
     <form method="post" enctype="multipart/form-data">
-        <p><u>Para realizar el encriptado asimétrico, antes hace falta elegir una clave pública <a href="/listadoArchivos">aquí</a></u></p>
-        <input type="hidden" name="clave" value={{nombre_archivo}}>
         <input type="hidden" name="modo" value="encriptacion">
         <label for="archivo">Seleccionar archivo:</label>
-        <input id="archivo" type="file" name="archivo">
+        <input id="archivo" type="file" name="archivo"><br><br>
+        <label for="clave_publica">Seleccionar clave publica:</label>
+        <input id="clave_publica" type="file" name="clave_publica">
         <br><br>
         <label>Almacenamiento para la encriptación:</label>
         <label for="local">Local</label>
@@ -70,8 +70,8 @@ C. Asimétrico
         <input type="hidden" name="modo" value="desencriptacion">
         <label for="archivo">Seleccionar archivo encriptado:</label>
         <input id="archivo" type="file" name="archivo"><br><br>
-        <label for="fingerprint">Identificador del par de claves: </label>
-        <input id="fingerprint" type="text" name="fingerprint"><br><br>
+        <label for="clave_privada">Seleccionar clave privada:</label>
+        <input id="clave_privada" type="file" name="clave_privada"><br><br>
         <input type="submit" name="desencriptar" value="Desencriptar">
     </form>
 

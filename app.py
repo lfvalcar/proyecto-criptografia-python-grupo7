@@ -110,7 +110,6 @@ def casimetrico():
     if request.method == 'POST': # El usuario envía una solicitud de encriptación o desencriptación
         # Traer del html los datos introducidos por el usuario a variables
         modo=request.form['modo'] # Objetivo (encriptar o desencriptar)
-        print(modo)
         if modo=='generacion':
             nombre_real=request.form['nombre']
             cookie=fflask.leer_credencial() # Comprobar si tenemos credenciales guardadas
@@ -123,6 +122,7 @@ def casimetrico():
             print(clave_publica,nombre_archivo_publica)
             conexion=fsmb.conexion_smb(usuario,password)
             fsmb.subir_archivo_smb(clave_publica,nombre_archivo_publica,recurso_compartido,conexion)
+        
         elif modo=='importacion':
                 archivo=request.files['archivo'] # Archivo a cifrar
                 nombre_real=request.form['nombre']
@@ -146,27 +146,33 @@ def casimetrico():
         # Encriptado
         if modo=='encriptacion': # Se inicia la encriptacion
             archivo=request.files['archivo'] # Archivo a cifrar
+            clave=request.files['clave_publica'] # Archivo a cifrar
             almacenamiento=request.form['almacenamiento'] # Donde se almacena el resultado
-            clave=request.form['clave']
-            fsmb.bajar_archivo_smb(clave)
+            clave_publica=fflask.subir_archivo(clave)
             archivo_original=fflask.subir_archivo(archivo)
-            archivo_cifrado=fsalva.cifrar_rsa(archivo_original,archivo.filename,clave_publica)
-            return fflask.descargar_archivos(archivo_cifrado)
+            archivo_cifrado,nombre_archivo_cifrado=fsalva.cifrar_rsa(archivo_original,archivo.filename,clave_publica)
             # Almacenamiento
             if almacenamiento=='local': # Se almacena los resultados de la encriptación en local
-                print('pruebas')
+                return fflask.descargar_archivos(archivo_cifrado)
             elif almacenamiento=='compartida': # Se almacena los resultados de la encriptación en remoto
                 cookie=fflask.leer_credencial() # Comprobar si tenemos credenciales guardadas
-                
+            
                 if cookie==False: # Si no hay credencial almacenada avisa al usuario de que hace falta inciar sesión
                     return render_template("casimetrico.html",cookieEnc=False)
-                
+            
                 usuario,password,recurso_compartido=fflask.extraer_credencial() # Si hay credenciales se extraen
             
+                cookie=fflask.leer_credencial() # Comprobar si tenemos credenciales guardadas
+                
+                conexion=fsmb.conexion_smb(usuario,password) # Se produce la conexión
+                fsmb.subir_archivo_smb(archivo_cifrado,nombre_archivo_cifrado,recurso_compartido,conexion) # Subida del archivo encriptado
+
         # Desencriptado
         elif modo=='desencriptacion': # Se inicia la desencriptación
             archivo=request.files['archivo'] # Archivo a cifrar
+            clave=request.files['clave_privada'] # Archivo a cifrar
             archivo_cifrado_rsa=fflask.subir_archivo(archivo)
+            clave_privada=fflask.subir_archivo(clave)
             arhivo_descifrado_rsa=fsalva.descifrar_rsa(archivo_cifrado_rsa,clave_privada)
             return fflask.descargar_archivos(arhivo_descifrado_rsa)
     # Dependiendo de los resultados se mostrarán mensajes de éxito o errores
@@ -206,8 +212,6 @@ def listar_archivos():
 
         if accion=='Descargar':
             return fflask.descargar_archivos(ruta_archivo_descargado) # Se envía el archivo al cliente
-        elif accion=='Utilizar':
-            return render_template("casimetrico.html",nombre_archivo=nombre_archivo)
 
     return render_template("listado_archivos.html")
 

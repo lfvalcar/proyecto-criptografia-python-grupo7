@@ -3,3 +3,4 @@ desarrollo
 
 # Omitimos cualquier archivo utilizado en las pruebas
 data/archivos/*
+data/keyring/*

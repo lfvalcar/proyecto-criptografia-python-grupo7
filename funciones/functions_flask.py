@@ -15,6 +15,7 @@ from shutil import copyfile
 archivos_local='data/archivos' # Carpeta de la aplicacion para gestion de ficheros
 archivo_credencial='data/credencial' # Archivo donde de se almacena la credencial junto al recurso compartido
 archivo_propiedades='data/propiedades'
+keyring="data/keyring"
 
 ###################################################
 #####FUNCIONES DE GESTIÓN DE FICHEROS EN FLASK#####
@@ -25,8 +26,12 @@ archivo_propiedades='data/propiedades'
     # archivo --> archivo subido por el usuario
 def subir_archivo(archivo):
     nombre_archivo=secure_filename(archivo.filename) # Comprobar con secure_filename de que el archivo no contenga caracteres no seguros
-    archivo.save(os.path.join(archivos_local, nombre_archivo)) # Almacenar el archivo en Flask con la libreria OS
-    ruta_archivo_subido=archivos_local+'/'+nombre_archivo # Obtener la ruta del archivo almacenado en string para otras funciones
+    if nombre_archivo.endswith('.pem') or nombre_archivo.endswith('.key'):
+        archivo.save(os.path.join(keyring, nombre_archivo)) # Almacenar el archivo en Flask con la libreria OS
+        ruta_archivo_subido=keyring+'/'+nombre_archivo # Obtener la ruta del archivo almacenado en string para otras funciones
+    else:
+        archivo.save(os.path.join(archivos_local, nombre_archivo)) # Almacenar el archivo en Flask con la libreria OS
+        ruta_archivo_subido=archivos_local+'/'+nombre_archivo # Obtener la ruta del archivo almacenado en string para otras funciones
 
     return ruta_archivo_subido # Devolver la ruta del archivo subido a la aplicacion y su nombre
 

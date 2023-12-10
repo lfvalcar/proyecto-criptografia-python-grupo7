@@ -3,5 +3,48 @@
 C. Simétrico
 {% endblock %}
 {% block content %}
-<p>Funcionalidades de cifrado híbrido</p>
+<h1>Cifrado y descifrado Híbrido</h1>
+
+<h2>Encriptado</h2>
+    <form method="post" enctype="multipart/form-data">
+        <input type="hidden" name="modo" value="encriptacion">
+        <label for="archivo">Seleccionar archivo:</label>
+        <input id="archivo" type="file" name="archivo">
+        <br><br>
+        <label>Algoritmo para la encriptación:</label>
+        <label for="des">AES</label>
+        <input type="radio" id="aes" name="algoritmo" value="AES">
+        <label for="algoritmo">DES</label>
+        <input type="radio" id="des" name="algoritmo" value="DES">
+        <br><br>
+        <label for="clave_publica">Seleccionar clave publica:</label>
+        <input id="clave_publica" type="file" name="clave_publica">
+        <br><br>
+        <label>Almacenamiento para la encriptación:</label>
+        <label for="local">Local</label>
+        <input type="radio" id="local" name="almacenamiento" value="local">
+        <label for="compartida">Compartida</label>
+        <input type="radio" id="compartida" name="almacenamiento" value="compartida">
+        <br><br>
+        <input type="submit" name="encriptar" value="Encriptar">
+    </form>
+
+    <h2>Desencriptado</h2>
+    <form method="post" enctype="multipart/form-data">
+        <input type="hidden" name="modo" value="desencriptacion">
+        <label for="archivo">Seleccionar archivo encriptado:</label>
+        <input id="archivo" type="file" name="archivo"><br><br>
+        <label for="clave">Seleccionar archivo clave simétrica encriptada:</label>
+        <input id="clave" type="file" name="clave"><br><br>
+        <label for="clave_privada">Seleccionar clave privada:</label>
+        <input id="clave_privada" type="file" name="clave_privada">
+        <br><br>
+        <label>Algoritmo para la desencriptación:</label>
+        <label for="des">AES</label>
+        <input type="radio" id="aes" name="algoritmo" value="AES">
+        <label for="algoritmo">DES</label>
+        <input type="radio" id="des" name="algoritmo" value="DES">
+        <br><br>
+        <input type="submit" name="desencriptar" value="Desencriptar">
+    </form>
 {% endblock %}

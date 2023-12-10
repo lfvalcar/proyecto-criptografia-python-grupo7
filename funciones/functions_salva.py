@@ -2,8 +2,10 @@ from Cryptodome.Cipher import DES
 from random import sample
 from Cryptodome.PublicKey import RSA
 from Cryptodome.Cipher import PKCS1_OAEP
-ruta_keyrings="data/keyrings"
+
+ruta_keyrings="data/keyring"
 ruta_archivo="data/archivos"
+
 #GENERADOR DE CLAVES
 # Declaramos la función con un argumento (longitud de la contraseña)
 def generador_claves():
@@ -105,15 +107,17 @@ def generar_claves_rsa(nombre_real):
     clave_publica=ruta_keyrings+"/"+nombre_archivo_publica
     clave_privada=ruta_keyrings+"/"+nombre_real+".key"
 
-    with open(clave_publica, "wb") as private_file:
+    with open(clave_privada, "wb") as private_file:
         private_file.write(private_key)
 
-    with open(clave_privada, "wb") as public_file:
+    with open(clave_publica, "wb") as public_file:
         public_file.write(public_key)
     return clave_privada,clave_publica,nombre_archivo_publica
 
-def cifrar_rsa(archivo_original,nombre_archivo_original, clave_publica):
+def cifrar_rsa(archivo_original,nombre_archivo_original,ruta_clave_publica):
     
+    clave_publica = open(ruta_clave_publica, "rb").read()
+
     key = RSA.import_key(clave_publica)
     cipher = PKCS1_OAEP.new(key)
     
@@ -121,13 +125,18 @@ def cifrar_rsa(archivo_original,nombre_archivo_original, clave_publica):
         data = file.read()
         ciphertext = cipher.encrypt(data)
 
-    archivo_cifrado=ruta_archivo+"/"+nombre_archivo_original
-    ruta_archivo_encriptado = archivo_cifrado + '.enc'
+    nombre_archivo_encriptado=nombre_archivo_original+'.enc'
+    archivo_cifrado=ruta_archivo+"/"+nombre_archivo_encriptado
+    ruta_archivo_encriptado = archivo_cifrado
+
     with open(archivo_cifrado, "wb") as file:
         file.write(ciphertext)
-        return ruta_archivo_encriptado
+        return ruta_archivo_encriptado,nombre_archivo_encriptado
 
-def descifrar_rsa(archivo_cifrado,clave_privada):
+def descifrar_rsa(archivo_cifrado,ruta_clave_privada):
+    
+    clave_privada = open(ruta_clave_privada, "rb").read()
+    
     ruta_archivo_desencriptado_rsa = archivo_cifrado[:-4] 
     key = RSA.import_key(clave_privada)
     cipher = PKCS1_OAEP.new(key)
