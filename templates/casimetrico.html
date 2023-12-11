@@ -14,7 +14,9 @@ C. Asimétrico
     </form>
 
     {% if resultado_generacion==True %}
-        <p><strong>par de claves generado con éxito</strong></p>
+        <p><u>Clave pública generada y subida al recurso compartido</u></p>
+        <p><u>Clave privada generada y almacenada en el llavero de la aplicación</u></p>
+        <p><strong>Par de claves generado con éxito</strong></p>
     {% endif %}
 
     <h2>Importación de claves públicas</h2>
@@ -37,7 +39,7 @@ C. Asimétrico
     {% endif %}
 
     {% if resultado_importacion==True %}
-        <p><strong>archivo se ha importado con éxito</strong></p>
+        <p><strong>Archivo importado con éxito</strong></p>
     {% endif %}
 
     <h2>Encriptado</h2>
@@ -62,7 +64,7 @@ C. Asimétrico
     {% endif %}
 
     {% if resultado_encriptado==True %}
-        <p><strong>archivo se ha encriptado con éxito</strong></p>
+        <p><strong>Archivo se ha encriptado con éxito</strong></p>
     {% endif %}
 
     <h2>Desencriptado</h2>

@@ -62,7 +62,7 @@ def cifrado(ruta_archivo, key):
         archivo.write(key)
 
     # Devolver las rutas de los archivos encriptados y la clave
-    return ruta_archivo_encriptado,ruta_archivo_clave,nombre_archivo_encriptado,nombre_archivo_clave
+    return ruta_archivo_encriptado,ruta_archivo_clave,nombre_archivo_encriptado,nombre_archivo_clave,True
 
 def descifrado(ruta_archivo_encriptado, ruta_archivo_clave):
     # Crear la ruta para el archivo desencriptado
@@ -94,7 +94,7 @@ def descifrado(ruta_archivo_encriptado, ruta_archivo_clave):
         archivo.write(decrypted_text)
 
     # Devolver la ruta del archivo descifrado
-    return ruta_archivo_desencriptado
+    return ruta_archivo_desencriptado,True
 
 
 def generar_claves_rsa(nombre_real):
@@ -112,7 +112,7 @@ def generar_claves_rsa(nombre_real):
 
     with open(clave_publica, "wb") as public_file:
         public_file.write(public_key)
-    return clave_privada,clave_publica,nombre_archivo_publica
+    return clave_privada,clave_publica,nombre_archivo_publica,True
 
 def cifrar_rsa(archivo_original,nombre_archivo_original,ruta_clave_publica):
     

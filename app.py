@@ -118,8 +118,7 @@ def casimetrico():
                return render_template("casimetrico.html",cookieIn=False)
                 
             usuario,password,recurso_compartido=fflask.extraer_credencial() # Si hay credenciales se extraen
-            clave_privada,clave_publica,nombre_archivo_publica=fsalva.generar_claves_rsa(nombre_real)
-            print(clave_publica,nombre_archivo_publica)
+            clave_privada,clave_publica,nombre_archivo_publica,resultado_generacion=fsalva.generar_claves_rsa(nombre_real)
             conexion=fsmb.conexion_smb(usuario,password)
             fsmb.subir_archivo_smb(clave_publica,nombre_archivo_publica,recurso_compartido,conexion)
         
@@ -182,6 +181,8 @@ def casimetrico():
         return render_template("casimetrico.html",resultado_desencriptado=True) # Éxito de la desencriptación
     elif resultado_importacion==True:
         return render_template("casimetrico.html",resultado_importacion=True)
+    elif resultado_generacion==True:
+        return render_template("casimetrico.html",resultado_generacion=True) # Éxito de la desencriptación
     else:
         return render_template("casimetrico.html") # Página por defecto
 
