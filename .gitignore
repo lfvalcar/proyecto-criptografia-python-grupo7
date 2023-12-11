@@ -2,5 +2,9 @@
 desarrollo
 
 # Omitimos cualquier archivo utilizado en las pruebas
-data/archivos/*
-data/keyring/*
+data/archivos/*.enc
+data/archivos/*.desenc
+data/archivos/*.txt
+# Omitimos subir los archivos del llavero
+data/keyring/*.pem
+data/keyring/*.key
