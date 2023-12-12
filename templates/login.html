@@ -14,4 +14,9 @@ Login
     <input type="hidden" name="accion" value="inicio">
     <input type="submit" value="Iniciar sesión...">
 </form>
+
+{% if credencial==False %}
+    <p><strong>Credenciales incorrectas</strong></p>
+{% endif %}
+
 {% endblock %}

@@ -1,23 +1,23 @@
+# Librerías
 from Cryptodome.Cipher import DES
-from random import sample
 from Cryptodome.PublicKey import RSA
 from Cryptodome.Cipher import PKCS1_OAEP
+from random import sample
 
-ruta_keyrings="data/keyring"
-ruta_archivo="data/archivos"
+# Variables globales
+keyring='data/keyring'
+archivos_aplicacion="data/archivos"
 
-#GENERADOR DE CLAVES
+#GENERADOR DE CLAVES DES
 # Declaramos la función con un argumento (longitud de la contraseña)
-def generador_claves():
+def generador_clave_des():
+    # Longitudad para las claves DES
     longitud=8
  
     # Definimos los caracteres y simbolos
-    
     abc_minusculas = "abcdefghijklmnopqrstuvwxyz"
-    
     # upper() transforma las letras de una cadena en mayusculas
     abc_mayusculas = abc_minusculas.upper() 
-    
     numeros = "0123456789"
     simbolos = "{}[]()*;/,_-"
     
@@ -29,74 +29,83 @@ def generador_claves():
     
     # Con join insertamos los elementos de una lista en una cadena
     password_result = "".join(password_union)
-    
+
     # Retornamos la variables "password_result"
     return password_result
 
-def cifrado(ruta_archivo, key):
+# CIFRADO DES
+def cifrado_des(ruta_archivo, clave):
     # Definir rutas para el archivo encriptado y la clave
     ruta_archivo_encriptado = ruta_archivo + '.enc'
     ruta_archivo_clave = ruta_archivo + '.des'
+
+    # Obtener el nombre de los archivos
     nombre_archivo_encriptado = ruta_archivo_encriptado[14:]
     nombre_archivo_clave = ruta_archivo_clave[14:]
 
     # Leer el contenido del archivo en modo binario
     with open(ruta_archivo, 'rb') as archivo:
-        plaintext = archivo.read()
+        mensaje = archivo.read()
 
     # Codificar la clave a bytes
-    keyenc = key.encode()
+    clave_encode = clave.encode()
 
     # Crear un objeto de cifrado DES en modo OFB (Output Feedback)
-    cipher = DES.new(keyenc, DES.MODE_OFB)
+    cifrador = DES.new(clave_encode, DES.MODE_OFB)
 
     # Cifrar el texto plano y agregar el vector de inicialización (IV)
-    msg = cipher.iv + cipher.encrypt(plaintext)
+    mensaje_encriptado = cifrador.iv + cifrador.encrypt(mensaje)
 
     # Escribir el mensaje cifrado en un nuevo archivo
     with open(ruta_archivo_encriptado, 'wb') as archivo:
-        archivo.write(msg)
+        archivo.write(mensaje_encriptado)
 
     # Escribir la clave en un archivo separado
     with open(ruta_archivo_clave, 'w') as archivo:
-        archivo.write(key)
+        archivo.write(clave)
 
     # Devolver las rutas de los archivos encriptados y la clave
-    return ruta_archivo_encriptado,ruta_archivo_clave,nombre_archivo_encriptado,nombre_archivo_clave,True
+    return ruta_archivo_encriptado,ruta_archivo_clave,nombre_archivo_encriptado,nombre_archivo_clave
 
-def descifrado(ruta_archivo_encriptado, ruta_archivo_clave):
+# DESCIFRADO DES
+def descifrado_des(ruta_archivo_encriptado, ruta_archivo_clave):
     # Crear la ruta para el archivo desencriptado
     ruta_archivo_desencriptado = ruta_archivo_encriptado[:-4] + '.desenc'
-    print(ruta_archivo_desencriptado)
 
     # Leer el mensaje encriptado desde el archivo
     with open(ruta_archivo_encriptado, 'rb') as archivo:
-        msg = archivo.read()
+        mensaje = archivo.read()
 
     # Leer la clave desde el archivo
     with open(ruta_archivo_clave, 'r') as archivo:
-        key = archivo.read()
+        clave = archivo.read()
 
     # Codificar la clave a bytes
-    keyenc = key.encode()
+    clave_enc = clave.encode()
 
     # Obtener el vector de inicialización (IV) del mensaje cifrado
-    iv = msg[:8]
+    iv = mensaje[:8]
 
-    # Crear un objeto de cifrado DES en modo OFB (Output Feedback) con el IV
-    cipher = DES.new(keyenc, DES.MODE_OFB, iv=iv)
+    # Control de errores
+    # Probamos
+    try:
+        # Crear un objeto de cifrado DES en modo OFB (Output Feedback) con el IV
+        descifrador = DES.new(clave_enc, DES.MODE_OFB, iv=iv)
+    # Si de try sale error se controla y si es de tipo ValueError como una clave incorrecta y salta el return False
+    except ValueError:
+        return False # Error de la encriptación
 
     # Descifrar el texto cifrado (excluyendo el IV)
-    decrypted_text = cipher.decrypt(msg[8:])
+    mensaje_desencriptado = descifrador.decrypt(mensaje[8:])
 
     # Escribir el texto descifrado en un nuevo archivo
     with open(ruta_archivo_desencriptado, 'wb') as archivo:
-        archivo.write(decrypted_text)
+        archivo.write(mensaje_desencriptado)
 
     # Devolver la ruta del archivo descifrado
-    return ruta_archivo_desencriptado,True
+    return ruta_archivo_desencriptado
 
-
+# GENERADOR DE CLAVES RSA
 def generar_claves_rsa(nombre_real):
     key = RSA.generate(2048)
     private_key = key.export_key()
@@ -104,8 +113,8 @@ def generar_claves_rsa(nombre_real):
 
     nombre_archivo_publica=nombre_real+".pem"
     # Guardar las claves en archivos
-    clave_publica=ruta_keyrings+"/"+nombre_archivo_publica
-    clave_privada=ruta_keyrings+"/"+nombre_real+".key"
+    clave_publica=keyring+"/"+nombre_archivo_publica
+    clave_privada=keyring+"/"+nombre_real+".key"
 
     with open(clave_privada, "wb") as private_file:
         private_file.write(private_key)
@@ -114,6 +123,7 @@ def generar_claves_rsa(nombre_real):
         public_file.write(public_key)
     return clave_privada,clave_publica,nombre_archivo_publica,True
 
+# CIFRADO RSA
 def cifrar_rsa(archivo_original,nombre_archivo_original,ruta_clave_publica):
     
     clave_publica = open(ruta_clave_publica, "rb").read()
@@ -126,13 +136,14 @@ def cifrar_rsa(archivo_original,nombre_archivo_original,ruta_clave_publica):
         ciphertext = cipher.encrypt(data)
 
     nombre_archivo_encriptado=nombre_archivo_original+'.enc'
-    archivo_cifrado=ruta_archivo+"/"+nombre_archivo_encriptado
+    archivo_cifrado=archivos_aplicacion+"/"+nombre_archivo_encriptado
     ruta_archivo_encriptado = archivo_cifrado
 
     with open(archivo_cifrado, "wb") as file:
         file.write(ciphertext)
         return ruta_archivo_encriptado,nombre_archivo_encriptado
 
+# DESCIFRADO RSA
 def descifrar_rsa(archivo_cifrado,ruta_clave_privada):
     
     clave_privada = open(ruta_clave_privada, "rb").read()

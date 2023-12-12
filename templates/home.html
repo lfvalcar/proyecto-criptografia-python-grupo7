@@ -3,10 +3,17 @@
 Inicio
 {% endblock %}
 {% block content %}
-<p>La página de inicio contendrá un enlace a las diferentes funcionalidades de la app</p>
+<center>
+
+<h1>¡Bienvenido {{usuario}}!</h1>
+
+<a href="/csimetrico/"><input type="button" value="Ir al cifrado simétrico"></a>
+<a href="/casimetrico/"><input type="button" value="Ir al cifrado asimétrico"></a>
+<br> <br>
+
 <form method="post">
-    <label>Cerrar Sesión</label>
     <input type="hidden" name="accion" value="fin">
     <input type="submit" value="Cerrar sesión...">
 </form>
+</center>
 {% endblock %}

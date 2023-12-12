@@ -20,9 +20,13 @@ servidor='127.0.0.1' # IP del servidor
 # Parametros de entrada:
     # Usuario,password --> usuario y contraseña con la que acceder al servidor
 def conexion_smb(usuario,password):
-    conexion = SMBConnection(usuario, password, usuario,servidor, use_ntlm_v2=True) # Crear la conexion con los parametros especificados
-    assert conexion.connect(ip=servidor, port=2001) # Conectar a la conexion creada
-
+    try:
+        conexion=SMBConnection(usuario, password, usuario,servidor, use_ntlm_v2=True) # Crear la conexion con los parametros especificados
+        conexion.connect(ip=servidor, port=2001) # Conectar a la conexion creada
+        conexion.listPath('GrupoSAD7','/')
+    except:
+        return False
+    
     return conexion
 
 # LISTAR ARCHIVO DEL SERVIDOR SAMBA

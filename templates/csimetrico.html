@@ -3,7 +3,7 @@
 C. Simétrico
 {% endblock %}
 {% block content %}
-<h1>Cifrado y descifrado Simétrico</h1>
+<h1>Cifrado y descifrado simétrico</h1>
 
     <h2>Encriptado</h2>
     <form method="post" enctype="multipart/form-data">
@@ -26,12 +26,12 @@ C. Simétrico
         <input type="submit" name="encriptar" value="Encriptar">
     </form>
 
-    {% if cookie==False %}
-        <p><u>Para utilizar el almacenamiento compartido, es necesario iniciar sesión <a href="/">aquí</a></u></p>
+    {% if credencial==False %}
+        <p><u>!Para utilizar el almacenamiento compartido, es necesario iniciar sesión <a href="/">aquí</a></u></p>
     {% endif %}
 
     {% if resultado_encriptado==True %}
-        <p><strong>Archivo encriptado con éxito</strong></p>
+        <p><strong>[Archivo encriptado con éxito]</strong></p>
     {% endif %}
 
     <h2>Desencriptado</h2>
@@ -50,5 +50,9 @@ C. Simétrico
         <br><br>
         <input type="submit" name="desencriptar" value="Desencriptar">
     </form>
+
+    {% if clave_incorrecta==True %}
+        <p><strong>!Clave incorrecta para el descifrado</strong></p>
+    {% endif %}
 
 {% endblock %}
