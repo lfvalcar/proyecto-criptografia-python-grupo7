@@ -13,23 +13,11 @@ C. Asimétrico
         <input type="submit" name="generacion" value="Generar par de claves">
     </form>
 
-    {% if resultado_generacion==True %}
-        <p><u>Clave pública generada y subida al recurso compartido</u></p>
-        <p><u>Clave privada generada y almacenada en el llavero de la aplicación</u></p>
-        <p><strong>Par de claves generado con éxito</strong></p>
-    {% endif %}
-
     <h2>Importación de claves públicas</h2>
     <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="modo" value="importacion">
         <label for="archivo">Seleccionar archivo:</label>
-        <input id="archivo" type="file" name="archivo"><br><br>
-        <label for="nombre">Nombre: </label>
-        <input id="nombre" type="text" name="nombre"><br><br>
-        <label for="correo">Correo electrónico: </label>
-        <input id="correo" type="email" name="correo"><br><br>
-        <label for="fingerprint">Identificador del par de claves: </label>
-        <input id="fingerprint" type="text" name="fingerprint">
+        <input id="archivo" type="file" name="archivo">
         <br><br>
         <input type="submit" name="importacion" value="Importar">
     </form>

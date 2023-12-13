@@ -20,16 +20,19 @@ C. Híbrido
         <label for="clave_publica">Seleccionar clave publica:</label>
         <input id="clave_publica" type="file" name="clave_publica">
         <br><br>
-        <label>Almacenamiento para la encriptación:</label>
-        <label for="local">Local</label>
-        <input type="radio" id="local" name="almacenamiento" value="local">
-        <label for="compartida">Compartida</label>
-        <input type="radio" id="compartida" name="almacenamiento" value="compartida">
-        <br><br>
         <input type="submit" name="encriptar" value="Encriptar">
     </form>
 
     <h2>Desencriptado</h2>
+    <script>
+        function mostrarInput(dato){
+            if (dato == "AES") {
+                document.getElementById("iv").style.display = "block";
+            }else{
+                document.getElementById("iv").style.display = "none";
+            }
+        }
+    </script>
     <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="modo" value="desencriptacion">
         <label for="archivo">Seleccionar archivo encriptado:</label>
@@ -43,10 +46,16 @@ C. Híbrido
         <br><br>
         <label>Algoritmo para la desencriptación:</label>
         <label for="des">AES</label>
-        <input type="radio" id="aes" name="algoritmo" value="AES">
+        <input type="radio" id="aes" name="algoritmo" value="AES" onchange="mostrarInput(this.value);">
         <label for="algoritmo">DES</label>
-        <input type="radio" id="des" name="algoritmo" value="DES">
-        <br><br>
+        <input type="radio" id="des" name="algoritmo" value="DES" onchange="mostrarInput(this.value);">
+        <br>
+        <div id="iv" style="display: none;">
+            <br>
+            <label for="archivo_iv">Seleccionar archivo iv:</label>
+            <input id="archivo_iv" type="file" name="archivo_iv">
+        </div>
+        <br>
         <input type="submit" name="desencriptar" value="Desencriptar">
     </form>
 {% endblock %}

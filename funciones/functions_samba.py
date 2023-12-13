@@ -10,6 +10,7 @@ archivos_local='data/archivos' # Carpeta de la aplicacion para gestion de ficher
 archivos_encriptados_remoto='/archivos_encriptados' # Carpeta remota (samba) donde compartir archivos encriptados
 claves_simetricas_remoto='/claves_simetricas' # Carpeta remota (samba) donde compartir claves simetricas
 claves_publicas_remoto='/claves_publicas' # Carpeta remota (samba) donde compartir claves publicas
+archivos_ivs_remoto='/archivos_ivs' # Carpeta remota (samba) donde compartir claves publicas
 servidor='127.0.0.1' # IP del servidor
 
 #################################################
@@ -92,8 +93,11 @@ def subir_archivo_smb(ruta_archivo_local,nombre_archivo,recurso_compartido,conex
             elif nombre_archivo.endswith('.des') or nombre_archivo.endswith('.aes'): # Si el archivo subido es .des o a.aes se enviará a la carpeta de claves simétricas 
                 ruta_archivo_remoto=claves_simetricas_remoto+'/'+nombre_archivo 
                 conexion.storeFile(recurso_compartido,ruta_archivo_remoto,archivo) 
-            elif nombre_archivo.endswith('.pem'): # Si el archivo subido es .pub se enviará a la carpeta de claves públicas
+            elif nombre_archivo.endswith('.pub'): # Si el archivo subido es .pem se enviará a la carpeta de claves públicas
                 ruta_archivo_remoto=claves_publicas_remoto+'/'+nombre_archivo
+                conexion.storeFile(recurso_compartido,ruta_archivo_remoto,archivo)
+            elif nombre_archivo.endswith('.iv'): # Si el archivo subido es .iv se enviará a la carpeta de claves públicas
+                ruta_archivo_remoto=archivos_ivs_remoto+'/'+nombre_archivo
                 conexion.storeFile(recurso_compartido,ruta_archivo_remoto,archivo)
     finally:
         conexion.close() # Cerrar la conexion

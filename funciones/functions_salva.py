@@ -10,9 +10,9 @@ archivos_aplicacion="data/archivos"
 
 #GENERADOR DE CLAVES DES
 # Declaramos la función con un argumento (longitud de la contraseña)
-def generador_clave_des():
+def generador_clave(length):
     # Longitudad para las claves DES
-    longitud=8
+    longitud=length
  
     # Definimos los caracteres y simbolos
     abc_minusculas = "abcdefghijklmnopqrstuvwxyz"
@@ -111,10 +111,10 @@ def generar_claves_rsa(nombre_real):
     private_key = key.export_key()
     public_key = key.publickey().export_key()
 
-    nombre_archivo_publica=nombre_real+".pem"
+    nombre_archivo_publica=nombre_real+".pub"
     # Guardar las claves en archivos
     clave_publica=keyring+"/"+nombre_archivo_publica
-    clave_privada=keyring+"/"+nombre_real+".key"
+    clave_privada=keyring+"/"+nombre_real+".pem"
 
     with open(clave_privada, "wb") as private_file:
         private_file.write(private_key)

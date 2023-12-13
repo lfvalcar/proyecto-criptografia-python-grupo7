@@ -35,6 +35,15 @@ C. Simétrico
     {% endif %}
 
     <h2>Desencriptado</h2>
+    <script>
+        function mostrarInput(dato){
+            if (dato == "AES") {
+                document.getElementById("iv").style.display = "block";
+            }else{
+                document.getElementById("iv").style.display = "none";
+            }
+        }
+    </script>
     <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="modo" value="desencriptacion">
         <label for="archivo">Seleccionar archivo encriptado:</label>
@@ -44,10 +53,16 @@ C. Simétrico
         <br><br>
         <label>Algoritmo para la desencriptación:</label>
         <label for="des">AES</label>
-        <input type="radio" id="aes" name="algoritmo" value="AES">
+        <input type="radio" id="aes" name="algoritmo" value="AES" onchange="mostrarInput(this.value);">
         <label for="algoritmo">DES</label>
-        <input type="radio" id="des" name="algoritmo" value="DES">
-        <br><br>
+        <input type="radio" id="des" name="algoritmo" value="DES" onchange="mostrarInput(this.value);">
+        <br>
+        <div id="iv" style="display: none;">
+        <br>
+        <label for="archivo_iv">Seleccionar archivo iv:</label>
+        <input id="archivo_iv" type="file" name="archivo_iv">
+        </div>
+        <br>
         <input type="submit" name="desencriptar" value="Desencriptar">
     </form>
 

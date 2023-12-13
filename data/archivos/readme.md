@@ -1,1 +1,1 @@
-# Archivos de la aplicación
+# Almacenamiento de la aplicación

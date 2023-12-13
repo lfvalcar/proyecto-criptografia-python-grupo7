@@ -93,9 +93,15 @@ def borrar_credencial():
         credencial.write('False') # Escribir False para identificar que no hay credencial almacenada
 
     # No solo se borra la credencial si no también los archivos locales de la sesión
-    archivos=glob.glob(archivos_local+'/*') # Listar todos los archivos a borrar mediante expresiones regulares
+    # Listar todos los archivos a borrar mediante expresiones regulares
+    archivos=glob.glob(archivos_local+'/*') 
+    archivos_keyring=glob.glob(keyring+'/*')
 
-    for archivo in archivos: # Se borra cada archivo listado
+    # Se borra cada archivo de cada listado
+    for archivo in archivos: 
+            os.remove(archivo)
+        
+    for archivo in archivos_keyring:
             os.remove(archivo)
 
 # EXTRACCIÓN DE LA CREDENCIAL
@@ -105,24 +111,3 @@ def extraer_credencial():
         usuario, password, recurso_compartido=registro.split(':') # Gracias a que separamos por : al almcenar podemos separarlo por : al extraer
         
         return usuario,password,recurso_compartido # Devolver la credencial
-    
-###############################################
-#####PROPIEDADES DE LAS CLAVES ASIMÉTRICAS#####
-###############################################
-# ALMACENAR PROPIEDADES DE UNA CLAVE
-def escribir_propiedades(nombre_archivo,ruta_archivo_clave,nombre,email,id):
-    with open(archivo_propiedades,'a') as propiedades:
-        contenido=nombre_archivo+':'+ruta_archivo_clave+':'+nombre+':'+email+':'+id
-        propiedades.write(contenido)
-        return True
-
-# EXTRAER PROPIEDADES DE UNA CLAVE
-def extraer_propiedades(keyid):
-    with open(archivo_propiedades,'r') as propiedades:
-        registros=propiedades.readlines
-        for registro in registros:
-            nombre_archivo, ruta_archivo_clave, nombre, email, id=registro.split(':')
-            if keyid==id:
-                continue
-        
-        return nombre_archivo, ruta_archivo_clave, nombre, email, id
