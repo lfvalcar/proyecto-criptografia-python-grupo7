@@ -3,5 +3,22 @@
 Documentación
 {% endblock %}
 {% block content %}
-<p>Esta página contendrá la documentación para el buen uso de la aplicación web</p>
+<h1>CIFRADO SIMÉTRICO</h1>
+<h2>ENCRIPTADO DES</h2>
+<p>Seleccionamos un archivo .txt y seleccionamos DES y luego seleccionamos local o compartida, depende donde lo queramos guardarla , en el caso de local nos aparecerá donde queremos guardar la clave simétrica y el archivo encriptado y en el caso de que sea compartido(el usuario tendrá que iniciar sesión en el servidor) aparecerá en ver archivos, en archivos encriptados y clave simétrica.</p>
+
+<h2>DESENCRIPTADO DES</h2>
+<p>Seleccionamos el archivo encriptado anteriormente y la clave simétrica del archivo encriptado y seleccionamos el algoritmo DES y se nos descargará el archivo desencriptado</p>
+
+<h1>CIFRADO ASIMÉTRICO </h1>
+<h2>GENERADOR PAR  DE CLAVES </h2>
+<p>Le ponemos el nombre que queramos y le damos a generar par de claves, y se nos descargará la clave privada y la clave pública se guardará en el servidor en la sección de ver archivos en clave publica</p>
+
+
+<h2>ENCRIPTADO ASIMÉTRICO </h2>
+<p>Seleccionamos el archivo .txt que queramos encriptar , luego seleccionamos la clave pública generada anteriormente con el generador del par de claves y elegimos donde queremos guardar el archivo encriptado,si en el servidor o en local, el cual se nos guardara un archivo .enc</p>
+
+<h2>DESENCIPTADO ASIMÉTRICO </h2>
+<p>Seleccionamos el archivo anteriormente encriptado y luego elegimos la clave privada que se nos ha descargado anteriormente para desencriptar el archivo encriptado, que se nos guardará con la extensión .desenc</p>
+
 {% endblock %}
