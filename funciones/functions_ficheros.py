@@ -36,10 +36,29 @@ def subir_archivo(archivo):
 
 # Guardar el/los archivos en el directorio seleccionado
 # Parametros de enrada:
-    # directorio_destino --> ruta del archivo ubicado en la aplicacion a descargar por el usuario
-    # *archivo --> lista de archivos a descargar
-def descargar_archivos(archivo):
-    return send_file(archivo,as_attachment=True) # Enviar el archivo
+    # nombre_zip --> nombre del archivo zip a descargar
+    # *archivos --> lista de archivos a descargar
+def descargar_archivos(nombre_zip,*archivos):
+    if len(archivos)>1: # Si es una archivo se descarga con send_file y si no se procede a la descargar de varios archivos
+        # Verificar que haya al menos un archivo para comprimir
+        if not archivos:
+            raise ValueError("La lista de rutas de archivos está vacía.")
+
+        # Crear la ruta completa del archivo zip
+        ruta_zip=archivos_local+'/'+nombre_zip
+
+        # Crear el archivo zip y agregar los archivos
+        with zipfile.ZipFile(ruta_zip, 'w') as zipf:
+            for archivo in archivos:
+                # Obtener el nombre del archivo sin la ruta completa
+                nombre_archivo=os.path.basename(archivo)
+                # Agregar el archivo al zip
+                zipf.write(archivo, nombre_archivo)
+
+        return ruta_zip
+    
+    return send_file(archivos[0],as_attachment=True) # Enviar el archivo
+
 
 ##################################
 #####GESTIÓN DE LA CREDENCIAL#####
@@ -88,21 +107,4 @@ def extraer_credencial():
         usuario, password, recurso_compartido=registro.split(':') # Gracias a que separamos por : al almcenar podemos separarlo por : al extraer
         
         return usuario,password,recurso_compartido # Devolver la credencial
-
-def comprimir_archivos_zip(nombre_zip,*rutas_archivos):
-    # Verificar que haya al menos un archivo para comprimir
-    if not rutas_archivos:
-        raise ValueError("La lista de rutas de archivos está vacía.")
-
-    # Crear la ruta completa del archivo zip
-    ruta_zip=archivos_local+'/'+nombre_zip
-
-    # Crear el archivo zip y agregar los archivos
-    with zipfile.ZipFile(ruta_zip, 'w') as zipf:
-        for ruta_archivo in rutas_archivos:
-            # Obtener el nombre del archivo sin la ruta completa
-            nombre_archivo=os.path.basename(ruta_archivo)
-            # Agregar el archivo al zip
-            zipf.write(ruta_archivo, nombre_archivo)
-
-    return ruta_zip
+    
