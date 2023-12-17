@@ -1,17 +1,12 @@
-###################
-#####LIBRERÍAS#####
-###################
+# LIBRERÍAS
 import os
 import glob
 from werkzeug.utils import secure_filename
 from flask import send_file
-import tkinter
-from tkinter import filedialog
 from shutil import copyfile
+import zipfile
 
-############################
-#####VARIABLES GLOBALES#####
-############################
+# VARIABLES GLOBALES
 archivos_local='data/archivos' # Carpeta de la aplicacion para gestion de ficheros
 archivo_credencial='data/credencial' # Archivo donde de se almacena la credencial junto al recurso compartido
 archivo_propiedades='data/propiedades'
@@ -26,43 +21,25 @@ keyring="data/keyring"
     # archivo --> archivo subido por el usuario
 def subir_archivo(archivo):
     nombre_archivo=secure_filename(archivo.filename) # Comprobar con secure_filename de que el archivo no contenga caracteres no seguros
-    if nombre_archivo.endswith('.pem') or nombre_archivo.endswith('.key'):
+    
+    # Dependiendo de la extensión se guarda en una ruta u otra
+    if nombre_archivo.endswith('.pem') or nombre_archivo.endswith('.pub') or nombre_archivo.endswith('.des') or nombre_archivo.endswith('.aes'):
+        # Se alamcena en el llavero
         archivo.save(os.path.join(keyring, nombre_archivo)) # Almacenar el archivo en Flask con la libreria OS
         ruta_archivo_subido=keyring+'/'+nombre_archivo # Obtener la ruta del archivo almacenado en string para otras funciones
     else:
+        # Se alamcena en los archivos de la aplicación
         archivo.save(os.path.join(archivos_local, nombre_archivo)) # Almacenar el archivo en Flask con la libreria OS
         ruta_archivo_subido=archivos_local+'/'+nombre_archivo # Obtener la ruta del archivo almacenado en string para otras funciones
 
     return ruta_archivo_subido # Devolver la ruta del archivo subido a la aplicacion y su nombre
 
-# DESCARGAR ARCHIVO DE FLASK
-# Seleccionar la ruta en el ordenador del usuario para almacenar el archivo
-# Parámetros de entrada:
-    # titulo --> título de la ventana emergente
-def ventana_dialogo_directorio(titulo):
-    ventana=tkinter.Tk() # Ventana emergente
-    ventana.withdraw() # Dibujar ventana
-    directorio_destino=filedialog.askdirectory(title=titulo) # Obtener la respuesta de la selección en la ventana
-    
-    return directorio_destino
-
 # Guardar el/los archivos en el directorio seleccionado
 # Parametros de enrada:
     # directorio_destino --> ruta del archivo ubicado en la aplicacion a descargar por el usuario
     # *archivo --> lista de archivos a descargar
-def descargar_archivos(*archivos):
-    if len(archivos)>1: # Si es una archivo se descarga con send_file y si no se procede a la descargar de varios archivos
-        for archivo in archivos:
-            nombre_archivo=os.path.basename(archivo) # Obtener el nombre del archivo
-            titulo='¿Donde guardamos: '+nombre_archivo+'?' # Título de la ventana de selección
-            directorio_destino=ventana_dialogo_directorio(titulo) # Lanzar ventana emergente
-        
-            if not os.path.exists(directorio_destino): # Crear el directorio si no existe
-                os.makedirs(directorio_destino)
-        
-            ruta_destino=os.path.join(directorio_destino, nombre_archivo) # Construir la ruta de destino
-            copyfile(archivo, ruta_destino) # Copiar el archivo al directorio de destino
-    return send_file(archivos[0],as_attachment=True) # Enviar el archivo
+def descargar_archivos(archivo):
+    return send_file(archivo,as_attachment=True) # Enviar el archivo
 
 ##################################
 #####GESTIÓN DE LA CREDENCIAL#####
@@ -111,3 +88,21 @@ def extraer_credencial():
         usuario, password, recurso_compartido=registro.split(':') # Gracias a que separamos por : al almcenar podemos separarlo por : al extraer
         
         return usuario,password,recurso_compartido # Devolver la credencial
+
+def comprimir_archivos_zip(nombre_zip,*rutas_archivos):
+    # Verificar que haya al menos un archivo para comprimir
+    if not rutas_archivos:
+        raise ValueError("La lista de rutas de archivos está vacía.")
+
+    # Crear la ruta completa del archivo zip
+    ruta_zip=archivos_local+'/'+nombre_zip
+
+    # Crear el archivo zip y agregar los archivos
+    with zipfile.ZipFile(ruta_zip, 'w') as zipf:
+        for ruta_archivo in rutas_archivos:
+            # Obtener el nombre del archivo sin la ruta completa
+            nombre_archivo=os.path.basename(ruta_archivo)
+            # Agregar el archivo al zip
+            zipf.write(ruta_archivo, nombre_archivo)
+
+    return ruta_zip

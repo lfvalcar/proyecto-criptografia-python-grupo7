@@ -1,1 +1,0 @@
-# Almacenamiento de la aplicación

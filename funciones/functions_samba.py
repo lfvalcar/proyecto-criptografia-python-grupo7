@@ -1,11 +1,7 @@
-###################
-#####LIBRERÍAS#####
-###################
+# LIBRERÍAS
 from smb.SMBConnection import SMBConnection
 
-############################
-#####VARIABLES GLOBALES#####
-############################
+# VARIABLES GLOBALES
 archivos_local='data/archivos' # Carpeta de la aplicacion para gestion de ficheros
 archivos_encriptados_remoto='/archivos_encriptados' # Carpeta remota (samba) donde compartir archivos encriptados
 claves_simetricas_remoto='/claves_simetricas' # Carpeta remota (samba) donde compartir claves simetricas
@@ -21,14 +17,15 @@ servidor='127.0.0.1' # IP del servidor
 # Parametros de entrada:
     # Usuario,password --> usuario y contraseña con la que acceder al servidor
 def conexion_smb(usuario,password):
+    # Probamos la conexión
     try:
         conexion=SMBConnection(usuario, password, usuario,servidor, use_ntlm_v2=True) # Crear la conexion con los parametros especificados
         conexion.connect(ip=servidor, port=2001) # Conectar a la conexion creada
-        conexion.listPath('GrupoSAD7','/')
+        conexion.listPath('GrupoSAD7','/') # Probar de que la conexión es correcta
     except:
-        return False
+        return False # Si salta un error en la prueba anterior devuelve False
     
-    return conexion
+    return conexion # Devolver la conexión
 
 # LISTAR ARCHIVO DEL SERVIDOR SAMBA
 # Parametros de entrada:
@@ -86,6 +83,7 @@ def listar_archivos_smb(recurso_compartido,conexion):
     # conexion --> conexion creada para utilizar para acceder al servidor
 def subir_archivo_smb(ruta_archivo_local,nombre_archivo,recurso_compartido,conexion):
     try:
+        # Dependiendo de la extensión del archivo se guarda en un sitio u otro
         with open(ruta_archivo_local, 'rb') as archivo:
             if nombre_archivo.endswith('.enc'): # Si el archivo subido es .enc se enviará a la carpeta de encriptados
                 ruta_archivo_remoto=archivos_encriptados_remoto+'/'+nombre_archivo # Ruta del archivo completa remoto donde se ubicará

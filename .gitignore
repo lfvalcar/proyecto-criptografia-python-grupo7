@@ -1,10 +1,27 @@
 # Carpeta de desarrollo de funciones 
 desarrollo
 
+# Omitimos la clave rsa
+id_rsa.pub
+
+# Omitimos el archivo de variables de entorno
+environment.yml
+
 # Omitimos cualquier archivo utilizado en las pruebas
 data/archivos/*.enc
 data/archivos/*.desenc
 data/archivos/*.txt
+data/archivos/*.iv
+
 # Omitimos subir los archivos del llavero
 data/keyring/*.pem
-data/keyring/*.key
+data/keyring/*.pub
+
+# Omitimos subir los archivos del servidor SMB
+deploy/ProyectoSAD/samba/GrupoSAD7/claves_publicas/*.pub
+deploy/ProyectoSAD/samba/GrupoSAD7/claves_simetricas/*.des
+deploy/ProyectoSAD/samba/GrupoSAD7/claves_simetricas/*.aes
+deploy/ProyectoSAD/samba/GrupoSAD7/archivos_encriptados/*.enc
+deploy/ProyectoSAD/samba/GrupoSAD7/archivos_encriptados/*.desenc
+deploy/ProyectoSAD/samba/GrupoSAD7/archivos_ivs/*.iv
+deploy/ProyectoSAD/samba/GrupoSAD7/archivos_encriptados/*.txt

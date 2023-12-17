@@ -4,8 +4,9 @@ C. Simétrico
 {% endblock %}
 {% block content %}
 <h1>Cifrado y descifrado simétrico</h1>
-
+    <!-- ENCRIPTADO -->
     <h2>Encriptado</h2>
+    <!-- Formulario para el encriptado simetrico -->
     <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="modo" value="encriptacion">
         <label for="archivo">Seleccionar archivo:</label>
@@ -15,8 +16,8 @@ C. Simétrico
         <label for="des">AES</label>
         <input type="radio" id="aes" name="algoritmo" value="AES">
         <label for="algoritmo">DES</label>
-        <input type="radio" id="des" name="algoritmo" value="DES">
-        <br><br>
+        <input type="radio" id="des" name="algoritmo" value="DES"> <br>
+        <br> 
         <label>Almacenamiento para la encriptación:</label>
         <label for="local">Local</label>
         <input type="radio" id="local" name="almacenamiento" value="local">
@@ -26,6 +27,7 @@ C. Simétrico
         <input type="submit" name="encriptar" value="Encriptar">
     </form>
 
+    <!-- Control de errores y éxitos -->
     {% if credencial==False %}
         <p><u>!Para utilizar el almacenamiento compartido, es necesario iniciar sesión <a href="/">aquí</a></u></p>
     {% endif %}
@@ -34,7 +36,9 @@ C. Simétrico
         <p><strong>[Archivo encriptado con éxito]</strong></p>
     {% endif %}
 
+    <!-- DESENCRIPTADO -->
     <h2>Desencriptado</h2>
+    <!-- Funcion javscript que oculta y muestra el seleccionar el archivo iv -->
     <script>
         function mostrarInput(dato){
             if (dato == "AES") {
@@ -44,6 +48,8 @@ C. Simétrico
             }
         }
     </script>
+
+    <!-- Formulario para el desencriptado simetrico -->
     <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="modo" value="desencriptacion">
         <label for="archivo">Seleccionar archivo encriptado:</label>
@@ -66,6 +72,7 @@ C. Simétrico
         <input type="submit" name="desencriptar" value="Desencriptar">
     </form>
 
+    <!-- Control de errores -->
     {% if clave_incorrecta==True %}
         <p><strong>!Clave incorrecta para el descifrado</strong></p>
     {% endif %}

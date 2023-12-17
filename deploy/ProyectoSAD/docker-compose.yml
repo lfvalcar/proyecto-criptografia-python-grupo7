@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  smb:
+    container_name: smbsrv
+    image: samba-sad
+    env_file:
+      - environment.yml
+    build:
+      context: $CONTEXT
+      dockerfile: $DOCKERFILE_SAMBA/Dockerfile
+      args:
+        SSH_PORT: $SSH_PORT
+        SMB_PORT: $SMB_PORT
+        IDRSA: $IDRSA
+        DOCKERFILE_SAMBA: $DOCKERFILE_SAMBA
+    ports:
+      - "2301:$SSH_PORT"
+      - "2302:$SMB_PORT"
+    volumes:
+      - ./samba/GrupoSAD7:/srv/anillos/GrupoSAD7:rw
+

@@ -4,14 +4,17 @@ Inicio
 {% endblock %}
 {% block content %}
 <center>
-
+<!-- Mensaje de bienvenida -->
 <h1>¡Bienvenido {{usuario}}!</h1>
 
+<!-- Menú con botones hacia cada una de las funcionalidades de la app -->
 <a href="/csimetrico/"><input type="button" value="Ir al cifrado y descifrado simétrico"></a>
 <a href="/casimetrico/"><input type="button" value="Ir al cifrado y descifrado asimétrico"></a>
+<a href="/chibrido/"><input type="button" value="Ir al cifrado y descifrado híbrido"></a>
 <a href="/listadoArchivos/"><input type="button" value="Ver archivos compartidos"></a>
 <br> <br>
 
+<!-- Solicitud de cerrado de sesión -->
 <form method="post">
     <input type="hidden" name="accion" value="fin">
     <input type="submit" value="Cerrar sesión...">

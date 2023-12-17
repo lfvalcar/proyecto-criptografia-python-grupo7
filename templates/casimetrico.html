@@ -4,7 +4,7 @@ C. Asimétrico
 {% endblock %}
 {% block content %}
 <h1>Cifrado y descifrado Asimétrico</h1>
-
+    <!-- Generador de claves -->
     <h2>Generador de par de claves</h2>
     <form method="post">
         <input type="hidden" name="modo" value="generacion">
@@ -13,6 +13,12 @@ C. Asimétrico
         <input type="submit" name="generacion" value="Generar par de claves">
     </form>
 
+    <!-- Control de errores -->
+    {% if cookieIn==False %}
+        <p><u>!Para utilizar la generación de claves, es necesario iniciar sesión<a href="/">aquí</a></u></p>
+    {% endif %}
+
+    <!-- Importación de claves públicas -->
     <h2>Importación de claves públicas</h2>
     <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="modo" value="importacion">
@@ -22,15 +28,18 @@ C. Asimétrico
         <input type="submit" name="importacion" value="Importar">
     </form>
 
+    <!-- Control de errores y éxitos -->
     {% if cookieIn==False %}
-        <p><u>Para utilizar el almacenamiento compartido, es necesario iniciar sesión <a href="/">aquí</a></u></p>
+        <p><u>!Para utilizar la importación de claves, es necesario iniciar sesión <a href="/">aquí</a></u></p>
     {% endif %}
 
     {% if resultado_importacion==True %}
-        <p><strong>Archivo importado con éxito</strong></p>
+        <p><strong>[Archivo importado con éxito]</strong></p>
     {% endif %}
 
+    <!-- ENCRIPTADO  -->
     <h2>Encriptado</h2>
+    <!-- Formulario para el encriptado  -->
     <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="modo" value="encriptacion">
         <label for="archivo">Seleccionar archivo:</label>
@@ -47,15 +56,18 @@ C. Asimétrico
         <input type="submit" name="encriptar" value="Encriptar">
     </form>
 
+    <!-- Control de errores y éxitos -->
     {% if cookieEnc==False %}
-        <p><u>Para utilizar el almacenamiento compartido, es necesario iniciar sesión <a href="/">aquí</a></u></p>
+        <p><u>!Para utilizar el almacenamiento compartido, es necesario iniciar sesión <a href="/">aquí</a></u></p>
     {% endif %}
 
     {% if resultado_encriptado==True %}
-        <p><strong>Archivo se ha encriptado con éxito</strong></p>
+        <p><strong>[Archivo se ha encriptado con éxito]</strong></p>
     {% endif %}
 
+    <!-- DESENCRIPTADO  -->
     <h2>Desencriptado</h2>
+    <!-- Formulario para el desencriptado -->
     <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="modo" value="desencriptacion">
         <label for="archivo">Seleccionar archivo encriptado:</label>
@@ -64,8 +76,4 @@ C. Asimétrico
         <input id="clave_privada" type="file" name="clave_privada"><br><br>
         <input type="submit" name="desencriptar" value="Desencriptar">
     </form>
-
-    {% if resultado_desencriptado==True %}
-        <p>El archivo se ha desencriptado con éxito</p>
-    {% endif %}
 {% endblock %}

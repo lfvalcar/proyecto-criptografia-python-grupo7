@@ -4,6 +4,7 @@ Login
 {% endblock %}
 {% block content %}
 <h1>Iniciar sesión</h1>
+<!-- Formulario inicio de sesión -->
 <form method="post">
     <label for="usuario">Usuario:</label>
     <input type="text" id="usuario" name="usuario" required>
@@ -15,6 +16,7 @@ Login
     <input type="submit" value="Iniciar sesión...">
 </form>
 
+<!-- Control de errores -->
 {% if credencial==False %}
     <p><strong>Credenciales incorrectas</strong></p>
 {% endif %}
