@@ -13,9 +13,12 @@ services:
         SMB_PORT: $SMB_PORT
         IDRSA: $IDRSA
         DOCKERFILE_SAMBA: $DOCKERFILE_SAMBA
+        MEDIA: $MEDIA
+        HTTP_PORT: $HTTP_PORT
     ports:
       - "2301:$SSH_PORT"
       - "2302:$SMB_PORT"
+      - "8080:$HTTP_PORT"
     volumes:
       - ./samba/GrupoSAD7:/srv/anillos/GrupoSAD7:rw
 

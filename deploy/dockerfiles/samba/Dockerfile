@@ -7,10 +7,13 @@ ARG IDRSA
 ARG SSH_PORT
 ARG SMB_PORT
 ARG DOCKERFILE_SAMBA
+ARG MEDIA
+ARG HTTP_PORT
 
 # Instalamos el paquete de samba
 RUN apt update && apt upgrade -yq && apt install -yq --no-install-recommends \
     samba \
+    apache2 \
     && apt autoremove -yq \
     && apt clean -yq
 
@@ -33,9 +36,12 @@ COPY ${DOCKERFILE_SAMBA}/scripts/* /root/scripts/
 RUN chmod u+x /root/scripts -R
 # Copiar archivo de configuración smb
 COPY ${DOCKERFILE_SAMBA}/smb.conf /etc/samba
+# Copiar las imágenes al servidor 
+COPY ${MEDIA} /var/www/html
 
 # Exponer puerto SMB
 EXPOSE ${SMB_PORT}
+EXPOSE ${HTTP_PORT}
 
 # Entrypoint 
 ENTRYPOINT [ "/root/scripts/start_smbd.sh" ]

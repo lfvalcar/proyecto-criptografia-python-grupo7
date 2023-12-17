@@ -3,22 +3,65 @@
 Documentación
 {% endblock %}
 {% block content %}
-<h1>CIFRADO SIMÉTRICO</h1>
-<h2>ENCRIPTADO DES</h2>
-<p>Seleccionamos un archivo .txt y seleccionamos DES y luego seleccionamos local o compartida, depende donde lo queramos guardarla , en el caso de local nos aparecerá donde queremos guardar la clave simétrica y el archivo encriptado y en el caso de que sea compartido(el usuario tendrá que iniciar sesión en el servidor) aparecerá en ver archivos, en archivos encriptados y clave simétrica.</p>
+<h1>CIFRADO HÍBRIDO</h1>
+    <h2>Cifrado</h2>
+        <img src="http://127.0.0.1:2082/cifrado_hibrido.png" alt="imagen ventana cifrado hibrido">
+        <p>Viendo la imagen de arriba para realizar el cifrado híbrido seguiremos los siguientes pasos:</p>
+        <ol>
+            <li>Seleccionar el archivo desde tu ordenador a encriptar</li>
+            <li>Seleccionar el algoritmo simétrico que se utilizará para el cifrado del archivo seleccionado (AES es más seguro)</li>
+            <li>Seleccionar la clave pública <strong>.pub</strong> para el cifrado de la clave simétrica (puede obtener la clave pública en el apartado de <a href="/casimetrico/">generador de par de claves</a>)</li>
+            <li>Una vez todo listo, accione el botón para comenzar el proceso donde como resultado obtendrá archivo encriptado <strong>.enc</strong> y la clave simétrica encriptada <strong>.des.enc</strong> si has elegido DES o <strong>.aes.enc</strong>, si has elegido AES obtendrá un archivo más <strong>.iv</strong> (estos archivos se suben al servicio compartido (<a href="/listadoArchivos/">Ver archivos</a>)</li>
+        </ol> <br>
+    <h2>Descifrado</h2>
+        <img src="http://127.0.0.1:2082/descifrado_hibrido.png" alt="imagen ventana descifrado hibrido">
+        <p>Viendo la imagen de arriba para realizar el descifrado híbrido seguiremos los siguientes pasos:</p>
+        <ol>
+            <li>Seleccionar el archivo encriptado desde tu ordenador a desencriptar <strong>.enc</strong></li>
+            <li>Seleccionar la clave simétrica encriptada en el cifrado híbrido <strong>.des.enc o .aes.enc</strong></li>
+            <li>Seleccionar la clave privada <strong>.pem</strong> generada junto a la clave pública en el (<a href="/casimetrico/">generador de par de claves</a>)</li>
+            <li>Seleccione el algoritmo simétrico para el desencriptado (puede saberlo mirando la extensión de la clave simétrica encriptada utilizada) (Si utiliza AES tednrá que seleccionar también el archivo <strong>.iv</strong>)</li>
+            <li>Una vez terminado, accione el botón para comenzar el desencriptado híbrido donde obtendrá el archivo desencriptado <strong>.desenc</strong></li>
+        </ol>
 
-<h2>DESENCRIPTADO DES</h2>
-<p>Seleccionamos el archivo encriptado anteriormente y la clave simétrica del archivo encriptado y seleccionamos el algoritmo DES y se nos descargará el archivo desencriptado</p>
+<h1>CIFRADO SIMÉTRICO</h1>
+    <h2>Encriptado DES</h2>
+        <p>Seleccionamos un archivo .txt y seleccionamos DES y luego seleccionamos local o compartida, depende donde lo queramos guardarla , en el caso de local nos aparecerá donde queremos guardar la clave simétrica y el archivo encriptado y en el caso de que sea compartido(el usuario tendrá que iniciar sesión en el servidor) aparecerá en ver archivos, en archivos encriptados y clave simétrica.</p>
+
+    <h2>Desencriptado DES</h2>
+        <p>Seleccionamos el archivo encriptado anteriormente y la clave simétrica del archivo encriptado y seleccionamos el algoritmo DES y se nos descargará el archivo desencriptado</p>
 
 <h1>CIFRADO ASIMÉTRICO </h1>
-<h2>GENERADOR PAR  DE CLAVES </h2>
-<p>Le ponemos el nombre que queramos y le damos a generar par de claves, y se nos descargará la clave privada y la clave pública se guardará en el servidor en la sección de ver archivos en clave publica</p>
+    <h2>Generador de par de claves aleatorias</h2>
+        <p>Le ponemos el nombre que queramos y le damos a generar par de claves, y se nos descargará la clave privada y la clave pública se guardará en el servidor en la sección de ver archivos en clave publica</p>
 
+    <h2>Importación de claves públicas</h2>
+    <img src="http://127.0.0.1:2082/importado_clave_publica.png" alt="imagen ventana importado clave pública">
+    <p>Viendo la imagen de arriba para realizar el importado de una calve pública seguiremos los siguientes pasos:</p>
+    <ol>
+        <li>Seleccionar la clave pública a importar <strong>.pub</strong></li>
+        <li>Una vez terminado, accionar el botón para comenzar el proceso del importado de la clave pública al almacenamiento compartido SMB</li>
+    </ol>
 
-<h2>ENCRIPTADO ASIMÉTRICO </h2>
-<p>Seleccionamos el archivo .txt que queramos encriptar , luego seleccionamos la clave pública generada anteriormente con el generador del par de claves y elegimos donde queremos guardar el archivo encriptado,si en el servidor o en local, el cual se nos guardara un archivo .enc</p>
+    <h2>Encriptado asimétrico</h2>
+        <p>Seleccionamos el archivo .txt que queramos encriptar , luego seleccionamos la clave pública generada anteriormente con el generador del par de claves y elegimos donde queremos guardar el archivo encriptado,si en el servidor o en local, el cual se nos guardara un archivo .enc</p>
 
-<h2>DESENCIPTADO ASIMÉTRICO </h2>
-<p>Seleccionamos el archivo anteriormente encriptado y luego elegimos la clave privada que se nos ha descargado anteriormente para desencriptar el archivo encriptado, que se nos guardará con la extensión .desenc</p>
+    <h2>Desencriptado asimétrico</h2>
+        <p>Seleccionamos el archivo anteriormente encriptado y luego elegimos la clave privada que se nos ha descargado anteriormente para desencriptar el archivo encriptado, que se nos guardará con la extensión .desenc</p>
+
+<h1>VER ARCHIVOS</h1>
+<img src="http://127.0.0.1:2082/ver_archivos.png" alt="imagen ventana descifrado hibrido">
+        <ol>
+            <li>Carpetas</li>
+            <ul>
+                <li>archivos_ivs --> .iv</li>
+                <li>claves_publicas --> .pub</li>
+                <li>claves_simetricas --> .des o .aes</li>
+                <li>archivos_encriptados --> .enc</li>
+            </ul>
+    <li>El nombre del archivo</li>
+    <li>Si acciona el botón se descargará el archivo en su ordenador</li>
+        </ol>
+
 
 {% endblock %}

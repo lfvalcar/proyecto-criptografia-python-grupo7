@@ -20,7 +20,7 @@ def conexion_smb(usuario,password):
     # Probamos la conexión
     try:
         conexion=SMBConnection(usuario, password, usuario,servidor, use_ntlm_v2=True) # Crear la conexion con los parametros especificados
-        conexion.connect(ip=servidor, port=2001) # Conectar a la conexion creada
+        conexion.connect(ip=servidor, port=2302) # Conectar a la conexion creada
         conexion.listPath('GrupoSAD7','/') # Probar de que la conexión es correcta
     except:
         return False # Si salta un error en la prueba anterior devuelve False

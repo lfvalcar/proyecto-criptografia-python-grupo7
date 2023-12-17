@@ -4,12 +4,11 @@ set -e
 
 bash ${SCRIPTS}/start.sh
 source ${SCRIPTS}/users.sh
-source ${SCRIPTS}/configSMB.sh
 
 mainSMB(){
    users 
-   configSMB
+   /usr/sbin/smbd --foreground --no-process-group &
+   /usr/sbin/apache2ctl -D FOREGROUND # Ejecución del servicio
 }
 
 mainSMB
-tail -f /dev/null 
