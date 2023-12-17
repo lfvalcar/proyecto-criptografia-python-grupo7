@@ -4,11 +4,17 @@ Documentación
 {% endblock %}
 {% block content %}
 <h1>CIFRADO SIMÉTRICO</h1>
+<h2>ENCRIPTADO AES</h2>
+<p>Seleccionaremos nuestro archivo .txt y elegiremos el cifrado AES ademas de si queremos guardarlo en local o "compartido", cuando pulsemos "Encriptar" se nos descargará un .zip con todo lo necesario: el archvio cifrado, la clave y el archivo IV. Una vez con ese .zip se lo mandaremos a la persona indicada que comenzará el proceso de desencriptacion</p>
+
+<h2>DESENCRIPTADO AES</h2>
+<p>Cuando recibamos el .zip lo descomprimiremos en una carpeta aparte de el usuario tenga, al hacerlo tendrás los tres archivos mencionados anteriormente, una vez los tengas te iras a la seccion de desencriptado y seleccionaras el archivo cifrado, la clave y el desencriptado AES, al seleccionarlo aparecerá otro apartado en el que elegiras el archivo IV. Finalmente pulsaras el boton "Desencriptar" y se te descargará un .txt con el contenido del archivo</p>
+
 <h2>ENCRIPTADO DES</h2>
-<p>Seleccionamos un archivo .txt y seleccionamos DES y luego seleccionamos local o compartida, depende donde lo queramos guardarla , en el caso de local nos aparecerá donde queremos guardar la clave simétrica y el archivo encriptado y en el caso de que sea compartido(el usuario tendrá que iniciar sesión en el servidor) aparecerá en ver archivos, en archivos encriptados y clave simétrica.</p>
+<p>El proceso es es mismo que con AES, con la unica diferencia que esta vez el .zip solo contendra el archivo cifrado y la clave</p>
 
 <h2>DESENCRIPTADO DES</h2>
-<p>Seleccionamos el archivo encriptado anteriormente y la clave simétrica del archivo encriptado y seleccionamos el algoritmo DES y se nos descargará el archivo desencriptado</p>
+<p>Seguiremos el mismo procedimiento que con el desencriptado AES ya que es totalmente igual, solo tenemos que seleccionar el archivo, la clave y el desencriptado DES. Finalmente pulsaras el boton "Desencriptar" y se te descargará un .txt con el contenido del archivo</p>
 
 <h1>CIFRADO ASIMÉTRICO </h1>
 <h2>GENERADOR PAR  DE CLAVES </h2>

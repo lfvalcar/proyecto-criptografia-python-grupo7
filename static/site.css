@@ -10,6 +10,37 @@
     padding: 10px;
 }
 
+p{
+    text-align: center;
+}
+
+h1{
+    text-align: center;
+    background-color: rgb(117, 99, 99);
+}
+
+h2{
+    text-align: center;
+    background-color: blanchedalmond;
+}
+
+h3{
+    text-align: center;
+}
+
+label{
+    background-color: whitesmoke;
+    text-align: center;
+    text-decoration: underline;
+    padding: 2px 20px;
+}
+
+input{
+    background-color: red;
+    font-size: 15px;
+    padding: 10px 20px;
+}
+
 .navbar {
     background: #333;
     color: #fff;
@@ -29,6 +60,15 @@
 
 .body-content {
     padding: 20px;
+}
+
+.body-content {
+    padding: 20px;
+    background: linear-gradient(yellow, red);
+    background-repeat: no-repeat;
+    height: 100%;
+    margin: 0;
+    background-attachment: fixed;
 }
 
 footer {
