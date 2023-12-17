@@ -12,6 +12,7 @@ data/archivos/*.enc
 data/archivos/*.desenc
 data/archivos/*.txt
 data/archivos/*.iv
+data/archivos/*.zip
 
 # Omitimos subir los archivos del llavero
 data/keyring/*.pem
