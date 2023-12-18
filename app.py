@@ -1,5 +1,5 @@
 # LIBRERÍAS
-from flask import Flask, render_template, request, url_for, redirect
+from flask import Flask, render_template, request, url_for, redirect, send_file
 
 # FUNCIONES
 import funciones.functions_simon as fsimon
@@ -93,13 +93,11 @@ def csimetrico():
             if almacenamiento=='local': # Se almacena los resultados de la encriptación en local
                 # Local
                 if algoritmo=='AES':
-                    nombre_zip=nombre_archivo_encriptado+'_encriptado_aes.zip'
-                    zip=fficheros.comprimir_archivos_zip(nombre_zip,archivo_encriptado,archivo_clave_aes,archivo_iv_aes) # Los resultados se guardan en un zip
-                    return fficheros.descargar_archivos(zip)
+                    nombre_zip=nombre_archivo_encriptado+'_encriptado_aes.zip' # Los resultados se guardan en un zip
+                    return fficheros.comprimir_zip(nombre_zip,archivo_encriptado,archivo_clave_aes)
                 elif algoritmo=='DES':
-                    nombre_zip=nombre_archivo_encriptado+'_encriptado_des.zip'
-                    zip=fficheros.comprimir_archivos_zip(nombre_zip,archivo_encriptado,archivo_clave_des) # Los resultados se guardan en un zip
-                    return fficheros.descargar_archivos(zip)
+                    nombre_zip=nombre_archivo_encriptado+'_encriptado_des.zip' # Los resultados se guardan en un zip
+                    return fficheros.comprimir_zip(nombre_zip,archivo_encriptado,archivo_clave_des)
                 # END Local
             elif almacenamiento=='compartida': # Se almacena los resultados de la encriptación en remoto
                 # Compartida
@@ -147,7 +145,7 @@ def csimetrico():
                 archivo_iv=fficheros.subir_archivo(iv) # Se trae a la aplicación el archivo iv
                 archivo_desencriptado=fsimon.descifrado_aes(archivo_encriptado,clave_aes,archivo_iv) # Descifrado AES
 
-                return fficheros.descargar_archivos(archivo_desencriptado) # Se envía el archivo al usuario
+                return send_file(archivo_desencriptado,as_attachment=True) # Se envía el archivo al usuario
                 # END Descifrado AES
             elif algoritmo=='DES': # Se produce la desencriptación simétrica con DES
                 # Descifrado DES
@@ -160,7 +158,7 @@ def csimetrico():
                 if archivo_desencriptado==False:
                     return render_template("csimetrico.html",clave_incorrecta=True) # En caso de error...
                 # END Errores
-                return fficheros.descargar_archivos(archivo_desencriptado) # Se envía el archivo al cliente
+                return send_file(archivo_desencriptado,as_attachment=True) # Se envía el archivo al usuario
                 # END Descifrado DES
             # END Algoritmo
         # END Desencriptado
@@ -201,7 +199,7 @@ def casimetrico():
             conexion=fsmb.conexion_smb(usuario,password) # Se produce la conexión
             fsmb.subir_archivo_smb(clave_publica,nombre_archivo_publica,recurso_compartido,conexion) # Se sube la clave pública
 
-            return fficheros.descargar_archivos(clave_privada) # Se envía la clave privada al usuario
+            return send_file(clave_privada,as_attachment=True) # Se envía la clave privada al usuario
         # END Generación de claves
         # Importación de claves públicas
         elif modo=='importacion':
@@ -240,7 +238,7 @@ def casimetrico():
             # Almacenamiento
             if almacenamiento=='local':
                 # Local
-                return fficheros.descargar_archivos(archivo_cifrado) # Se envía el archivo al usuario
+                return send_file(archivo_cifrado,as_attachment=True) # Se envía el archivo al usuario
                 # END Local
             elif almacenamiento=='compartida':
                 # Compartida
@@ -267,8 +265,8 @@ def casimetrico():
             archivo_cifrado_rsa=fficheros.subir_archivo(archivo) 
             clave_privada=fficheros.subir_archivo(clave)
 
-            arhivo_descifrado_rsa=fsalva.descifrar_rsa(archivo_cifrado_rsa,clave_privada) # Descifrado RSA
-            return fficheros.descargar_archivos(arhivo_descifrado_rsa) # Se envía los resultados al usuario
+            archivo_descifrado_rsa=fsalva.descifrar_rsa(archivo_cifrado_rsa,clave_privada) # Descifrado RSA
+            return send_file(archivo_descifrado_rsa,as_attachment=True) # Se envía los resultados al usuario
             # END Desencriptado RSA
         # END Desencriptado
     # END Solicitud
@@ -377,8 +375,7 @@ def chibrido():
                 return render_template("csimetrico.html",clave_incorrecta=True) # En caso de error...
             # END Errores
 
-            #Se envía el archivo descifrado al usuario
-            return fficheros.descargar_archivos(ruta_archivo_desencriptado)
+            return send_file(ruta_archivo_desencriptado,as_attachment=True) # Se envía el archivo al usuario
         # END Desencriptado híbrido
     # END Solicitud
         
@@ -410,7 +407,7 @@ def listar_archivos():
         conexion=fsmb.conexion_smb(usuario,password) # Se realiza la conexión
         ruta_archivo_descargado=fsmb.bajar_archivo_smb(nombre_archivo,ruta_archivo_remoto,recurso_compartido,conexion) # Se baja el archivo a la aplición
 
-        return fficheros.descargar_archivos(ruta_archivo_descargado) # Se envía el archivo al usuario
+        return send_file(ruta_archivo_descargado,as_attachment=True) # Se envía el archivo al usuario
     # END Solicitud
     return render_template("listado_archivos.html") # Página por defecto
 

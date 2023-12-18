@@ -3,7 +3,6 @@ import os
 import glob
 from werkzeug.utils import secure_filename
 from flask import send_file
-from shutil import copyfile
 import zipfile
 
 # VARIABLES GLOBALES
@@ -38,26 +37,23 @@ def subir_archivo(archivo):
 # Parametros de enrada:
     # nombre_zip --> nombre del archivo zip a descargar
     # *archivos --> lista de archivos a descargar
-def descargar_archivos(nombre_zip,*archivos):
-    if len(archivos)>1: # Si es una archivo se descarga con send_file y si no se procede a la descargar de varios archivos
-        # Verificar que haya al menos un archivo para comprimir
-        if not archivos:
-            raise ValueError("La lista de rutas de archivos está vacía.")
+def comprimir_zip(nombre_zip,*archivos):
+    # Verificar que haya al menos un archivo para comprimir
+    if not archivos:
+        raise ValueError("La lista de rutas de archivos está vacía.")
 
-        # Crear la ruta completa del archivo zip
-        ruta_zip=archivos_local+'/'+nombre_zip
+    # Crear la ruta completa del archivo zip
+    ruta_zip=archivos_local+'/'+nombre_zip
 
-        # Crear el archivo zip y agregar los archivos
-        with zipfile.ZipFile(ruta_zip, 'w') as zipf:
-            for archivo in archivos:
-                # Obtener el nombre del archivo sin la ruta completa
-                nombre_archivo=os.path.basename(archivo)
-                # Agregar el archivo al zip
-                zipf.write(archivo, nombre_archivo)
+    # Crear el archivo zip y agregar los archivos
+    with zipfile.ZipFile(ruta_zip, 'w') as zipf:
+        for archivo in archivos:
+            # Obtener el nombre del archivo sin la ruta completa
+            nombre_archivo=os.path.basename(archivo)
+            # Agregar el archivo al zip
+            zipf.write(archivo, nombre_archivo)
 
-        return ruta_zip
-    
-    return send_file(archivos[0],as_attachment=True) # Enviar el archivo
+    return send_file(ruta_zip,as_attachment=True) # Enviar el archivo
 
 
 ##################################
