@@ -1,6 +1,6 @@
 # Dockerfile de la imagen samba-sad
 # Partimos de la imagen base de debian
-FROM deb-base
+FROM lfvalcar/deb-base
 
 # Argumentos
 ARG IDRSA

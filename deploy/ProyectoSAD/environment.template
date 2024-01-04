@@ -1,0 +1,20 @@
+# Contexto
+CONTEXT=/home/adminsrv/proyecto-criptografia-python-grupo7/deploy
+IDRSA=claves/tu_id_rsa.pub
+SCRIPTS=/root/scripts
+
+DOCKERFILE_SAMBA=dockerfiles/samba
+
+ADMIN_USER=usuario
+ADMIN_PASSWORD=usuario
+USER1=usuario1
+USER1_PASSWORD=usuario1
+USER2=usuario2
+USER2_PASSWORD=usuario2
+USER3=usuario3
+USER3_PASSWORD=usuario3
+
+SSH_PORT=2222
+SMB_PORT=445
+
+LOG=/root/logs/smbsrv.html

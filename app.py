@@ -77,9 +77,9 @@ def csimetrico():
             if algoritmo=='AES':
                 # Cifrado AES
                 archivo_original=fficheros.subir_archivo(archivo) # Se sube el archivo a la aplicación para el proceso
-                iv_aes=fsimon.generate_random_iv() # Se genera un iv aleatorio
+                iv=fsimon.generate_random_iv() # Se genera un iv aleatorio
                 clave_aes=fsalva.generador_clave(16) # Se genera una clave aleatoria para el cifrado AES
-                archivo_encriptado,archivo_clave_aes,archivo_iv_aes,nombre_archivo_iv_aes,nombre_archivo_encriptado,nombre_archivo_clave_aes=fsimon.cifrado_aes(archivo_original,clave_aes,iv_aes) # Cifrado AES
+                archivo_encriptado,archivo_clave_aes,archivo_iv,nombre_archivo_iv,nombre_archivo_encriptado,nombre_archivo_clave_aes=fsimon.cifrado_aes(archivo_original,clave_aes,iv) # Cifrado AES
                 # END Cifrado AES
             elif algoritmo=='DES':
                 # Cifrado DES
@@ -94,7 +94,7 @@ def csimetrico():
                 # Local
                 if algoritmo=='AES':
                     nombre_zip=nombre_archivo_encriptado+'_encriptado_aes.zip' # Los resultados se guardan en un zip
-                    return fficheros.comprimir_zip(nombre_zip,archivo_encriptado,archivo_clave_aes)
+                    return fficheros.comprimir_zip(nombre_zip,archivo_encriptado,archivo_clave_aes,archivo_iv)
                 elif algoritmo=='DES':
                     nombre_zip=nombre_archivo_encriptado+'_encriptado_des.zip' # Los resultados se guardan en un zip
                     return fficheros.comprimir_zip(nombre_zip,archivo_encriptado,archivo_clave_des)
@@ -119,7 +119,7 @@ def csimetrico():
                     fsmb.subir_archivo_smb(archivo_clave_aes,nombre_archivo_clave_aes,recurso_compartido,conexion) # Subida del archivo clave AES
 
                     conexion=fsmb.conexion_smb(usuario,password) # Se produce la conexión
-                    fsmb.subir_archivo_smb(archivo_iv_aes,nombre_archivo_iv_aes,recurso_compartido,conexion) # Subida del archivo iv
+                    fsmb.subir_archivo_smb(archivo_iv,nombre_archivo_iv,recurso_compartido,conexion) # Subida del archivo iv
 
                 elif algoritmo=='DES':
                     conexion=fsmb.conexion_smb(usuario,password) # Se produce la conexión
